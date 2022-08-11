@@ -15,3 +15,9 @@ graph ql
 - メイン画面には今日のレシピを表示
 - 履歴確認画面
 - レシピ登録画面
+
+## 環境変数
+- auth0関連
+- firebase realtime db 関連
+
+
