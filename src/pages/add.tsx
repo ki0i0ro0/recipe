@@ -1,19 +1,19 @@
+import { create } from '@/api/recipe'
+import type { Recipe } from '@/types'
+import { createValues } from '@/utils/create-values'
 import { withPageAuthRequired } from '@auth0/nextjs-auth0'
 import { Add } from '@mui/icons-material'
 import { Avatar, Typography } from '@mui/material'
 import Router from 'next/router'
 import type { Dispatch, SetStateAction } from 'react'
 import MyForm from '../components/BaseForm'
-import { Recipe } from '../types'
-import { create } from '../util/book-util'
-import { createValues } from '../util/create-values'
 
 const App = () => {
-  const values = createValues()
+  const initValue = createValues()
 
-  const createBook = async (values: Recipe, setLoading: Dispatch<SetStateAction<boolean>>) => {
+  const createRecipe = async (value: Recipe, setLoading: Dispatch<SetStateAction<boolean>>) => {
     setLoading(true)
-    await create(values)
+    await create(value)
     setLoading(false)
     Router.push({ pathname: '/' })
   }
@@ -24,7 +24,7 @@ const App = () => {
         <Add />
       </Avatar>
       <Typography textAlign="center">レシピを追加</Typography>
-      <MyForm initialValues={values} onSubmit={createBook} type="create" />
+      <MyForm initialValues={initValue} onSubmit={createRecipe} type="create" />
     </>
   )
 }

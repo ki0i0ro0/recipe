@@ -1,42 +1,36 @@
+import { getAll, setUserId } from '@/api/recipe'
+import { EnhancedTable } from '@/components/EnhancedTable'
+import type { Recipe } from '@/types'
 import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0'
 import { AddCircle } from '@mui/icons-material'
 import { CircularProgress, IconButton } from '@mui/material'
 import Router from 'next/router'
 import { useEffect, useState } from 'react'
-import DeleteDialog from '../components/DeleteDialog'
-import { EnhancedTable } from '../components/EnhancedTable'
-import { Recipe } from '../types'
-import { getAll, remove, setUserId } from '@/api/recipe'
 
 const App = () => {
-  const [editedIds, setEditedId] = useState<string[]>([])
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
   const [selected, setSelected] = useState<readonly string[]>([])
   const [data, setData] = useState<Recipe[]>([])
   const { user } = useUser()
-  const userId = (user?.sub ? user?.sub.split('|').pop() : '') || ''
-  setUserId(userId)
 
   useEffect(() => {
     getAll().then((res) => {
       setData(res)
     })
+    const userId = (user?.sub ? user?.sub.split('|').pop() : '') || ''
+    setUserId(userId)
   }, [])
 
   if (!data) return <CircularProgress />
 
-  const handleCreate = (): void => {
+  const handleCreate = () => {
     Router.push({ pathname: `/create` })
   }
 
-  const handleEdit = (id: number): void => {
+  const handleEdit = (id: number) => {
     Router.push({ pathname: `/update/${id}` })
   }
 
-  const rowDeleteClicked = (ids: string[]): void => {
-    setEditedId(ids)
-    setIsDeleteDialogOpen(true)
-  }
+  const rowDeleteClicked = (ids: string[]) => {}
 
   return (
     <>
@@ -54,12 +48,6 @@ const App = () => {
         rowDeleteClicked={rowDeleteClicked}
         selected={selected}
         setSelected={setSelected}
-      />
-
-      <DeleteDialog
-        isOpen={isDeleteDialogOpen}
-        onClose={() => setIsDeleteDialogOpen(false)}
-        onDelete={handleDelete}
       />
     </>
   )

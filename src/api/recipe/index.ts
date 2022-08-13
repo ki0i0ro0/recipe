@@ -1,6 +1,6 @@
 import { defaultValue } from '@/config'
 import { axios } from '@/lib/axios'
-import { Recipe } from '@/types'
+import type { Recipe } from '@/types'
 
 export const setUserId = (userId: string) => {}
 
@@ -11,12 +11,4 @@ export const getAll = async () => {
   return [] as Recipe[]
 }
 
-export const get = async () => {
-  return defaultValue as Recipe
-}
-
-export const create = async () => {}
-
-export const update = async () => {}
-
-export const remove = async () => {}
+export const create = async (value: Recipe) => {}
