@@ -1,25 +1,29 @@
-import { getAll, setUserId } from '@/api/recipe'
 import { EnhancedTable } from '@/components/EnhancedTable'
 import type { Recipe } from '@/types'
 import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0'
 import { AddCircle } from '@mui/icons-material'
 import { CircularProgress, IconButton } from '@mui/material'
 import Router from 'next/router'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
+import { gql, useQuery } from '@apollo/client'
+
+const GET_USERS = gql`
+  query GetUsers {
+    users {
+      id
+      name
+      email
+    }
+  }
+`
 
 const App = () => {
   const [selected, setSelected] = useState<readonly string[]>([])
-  const [data, setData] = useState<Recipe[]>([])
   const { user } = useUser()
+  const { data, loading, error } = useQuery<Recipe[]>(GET_USERS)
 
-  useEffect(() => {
-    getAll().then((res) => {
-      setData(res)
-    })
-    const userId = (user?.sub ? user?.sub.split('|').pop() : '') || ''
-    setUserId(userId)
-  }, [])
-
+  if (loading) return <CircularProgress />
+  if (error) return <p>エラーが発生しています</p>
   if (!data) return <CircularProgress />
 
   const handleCreate = () => {

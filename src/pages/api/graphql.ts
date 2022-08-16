@@ -20,11 +20,29 @@ const typeDefs = gql`
     email: String!
   }
 
+  type Recipe {
+    id: ID!
+    user_Id: Int!
+    data: String
+  }
+
   type Query {
     hello: String
     users: [User]
+    recipe(user_id: Int!): Recipe
   }
 `
+const getRecipe = (parent: any, args: any) => {
+  const userId = args.user_id
+
+  const userRecipe = prisma.recipe.findFirst({
+    where: {
+      user_id: userId,
+    },
+  })
+
+  return userRecipe
+}
 
 const resolvers = {
   Query: {
@@ -32,6 +50,7 @@ const resolvers = {
     users: async (parent: undefined, args: {}, context: Context) => {
       return await context.prisma.user.findMany()
     },
+    recipe: (parent: any, args: any) => getRecipe(parent, args),
   },
 }
 
