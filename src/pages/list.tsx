@@ -7,12 +7,11 @@ import Router from 'next/router'
 import { useState } from 'react'
 import { gql, useQuery } from '@apollo/client'
 
-const GET_USERS = gql`
-  query GetUsers {
-    users {
+const GET_RECIPE = gql`
+  query getRecipe($email: String!) {
+    recipe(email: $email) {
       id
-      name
-      email
+      data
     }
   }
 `
@@ -20,7 +19,11 @@ const GET_USERS = gql`
 const App = () => {
   const [selected, setSelected] = useState<readonly string[]>([])
   const { user } = useUser()
-  const { data, loading, error } = useQuery<Recipe[]>(GET_USERS)
+  const { data, loading, error } = useQuery<any[]>(GET_RECIPE, {
+    variables: {
+      email: user!.email,
+    },
+  })
 
   if (loading) return <CircularProgress />
   if (error) return <p>エラーが発生しています</p>
