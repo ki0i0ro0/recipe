@@ -1,6 +1,6 @@
 import type { AppProps } from 'next/app'
-
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client'
+import { UserProvider } from '@auth0/nextjs-auth0'
 
 const client = new ApolloClient({
   uri: '/api/graphql',
@@ -9,9 +9,11 @@ const client = new ApolloClient({
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <ApolloProvider client={client}>
-      <Component {...pageProps} />
-    </ApolloProvider>
+    <UserProvider>
+      <ApolloProvider client={client}>
+        <Component {...pageProps} />
+      </ApolloProvider>
+    </UserProvider>
   )
 }
 
