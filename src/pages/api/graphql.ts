@@ -2,55 +2,53 @@ import { ApolloServer, gql } from 'apollo-server-micro'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { PrismaClient } from '@prisma/client'
 
-interface Context {
-  prisma: PrismaClient
-}
-
 const prisma = new PrismaClient()
 
-const users = [
-  { id: '1', name: 'John Doe', email: 'john@test.com' },
-  { id: '2', name: 'Jane Doe', email: 'jane@example.com' },
-]
-
 const typeDefs = gql`
-  type User {
-    id: ID!
-    name: String!
-    email: String!
-  }
-
   type Recipe {
     id: ID!
-    user_Id: Int!
     data: String
   }
 
   type Query {
-    hello: String
-    users: [User]
-    recipe(user_id: Int!): Recipe
+    recipe(email: String!): Recipe
+  }
+
+  type Mutation {
+    updateRecipe(id: Int!, data: String): Recipe
   }
 `
-const getRecipe = (parent: any, args: any) => {
-  const userId = args.user_id
 
-  const userRecipe = prisma.recipe.findFirst({
+const getRecipe = async (args: { email: string }) => {
+  const { email } = args
+  const user = await prisma.user.findFirst({
     where: {
-      user_id: userId,
+      email,
     },
   })
 
-  return userRecipe
+  return prisma.recipe.findFirst({
+    where: {
+      user_id: user?.id,
+    },
+  })
 }
 
 const resolvers = {
   Query: {
-    hello: () => 'Hello World',
-    users: async (parent: undefined, args: {}, context: Context) => {
-      return await context.prisma.user.findMany()
+    recipe: (_: undefined, args: any) => getRecipe(args),
+  },
+  Mutation: {
+    updateRecipe: (_: undefined, args: any) => {
+      return prisma.recipe.update({
+        where: {
+          id: args.id,
+        },
+        data: {
+          data: args.data,
+        },
+      })
     },
-    recipe: (parent: any, args: any) => getRecipe(parent, args),
   },
 }
 
