@@ -3,23 +3,26 @@ import { LoadingButton } from '@mui/lab'
 import { Stack, TextField } from '@mui/material'
 import { useFormik } from 'formik'
 import { Dispatch, SetStateAction, useState } from 'react'
-import { Recipe } from '../types'
-import { BookFormSchema } from '../utils/accessor'
+import { Menu } from '@/types'
+import * as Yup from 'yup'
 
-const BookForm = ({
-  initialValues,
-  onSubmit,
-  type = 'create',
-}: {
-  initialValues: Recipe
-  onSubmit: (values: Recipe, setLoading: Dispatch<SetStateAction<boolean>>) => void
+const FORM_SCHEMA = Yup.object({
+  name: Yup.string().required(),
+})
+
+interface Props {
+  initialValues: Menu
+  onSubmit: (values: Menu, setLoading: Dispatch<SetStateAction<boolean>>) => void
   type: string
-}): JSX.Element => {
+}
+
+const BookForm = (props: Props): JSX.Element => {
+  const { initialValues, onSubmit, type = 'create' } = props
   const [loading, setLoading] = useState(false)
   const formik = useFormik({
     initialValues: initialValues,
-    validationSchema: BookFormSchema,
-    onSubmit: (values: Recipe) => {
+    validationSchema: FORM_SCHEMA,
+    onSubmit: (values: Menu) => {
       onSubmit(values, setLoading)
     },
   })
@@ -32,7 +35,7 @@ const BookForm = ({
         fullWidth
         margin="normal"
         name="name"
-        label="Book Name"
+        label="メニュー名"
         value={formik.values.name}
         onChange={formik.handleChange}
         required
