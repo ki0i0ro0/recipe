@@ -12,4 +12,8 @@ export interface Recipe extends BaseType {
   name: string
 }
 
+export interface Menu {
+  name: string
+}
+
 export type Order = 'asc' | 'desc'

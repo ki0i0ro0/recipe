@@ -10,15 +10,27 @@ const typeDefs = gql`
     data: String
   }
 
+  type Menu {
+    id: ID!
+    name: String
+  }
+
   type Query {
     recipe(email: String!): Recipe
+    menus: [Menu]
   }
 
   type Mutation {
     updateRecipe(id: Int!, data: String): Recipe
+    createMenu(name: String!): Menu
   }
 `
 
+/**
+ * ユーザー毎のレシピ取得
+ * @param args
+ * @returns
+ */
 const getRecipe = async (args: { email: string }) => {
   const { email } = args
   const user = await prisma.user.findFirst({
@@ -26,7 +38,6 @@ const getRecipe = async (args: { email: string }) => {
       email,
     },
   })
-
   return prisma.recipe.findFirst({
     where: {
       user_id: user?.id,
@@ -34,21 +45,41 @@ const getRecipe = async (args: { email: string }) => {
   })
 }
 
+/**
+ * レシピ履歴更新
+ * @param args
+ * @returns
+ */
+const updateRecipe = (args: { id: number; data?: string }) =>
+  prisma.recipe.update({
+    where: {
+      id: args.id,
+    },
+    data: {
+      data: args.data,
+    },
+  })
+
+/**
+ * メニュー作成
+ * @param args
+ * @returns
+ */
+const createMenu = (args: { name: string }) =>
+  prisma.menu.create({
+    data: {
+      name: args.name,
+    },
+  })
+
 const resolvers = {
   Query: {
     recipe: (_: undefined, args: any) => getRecipe(args),
+    menus: () => prisma.menu.findMany(),
   },
   Mutation: {
-    updateRecipe: (_: undefined, args: any) => {
-      return prisma.recipe.update({
-        where: {
-          id: args.id,
-        },
-        data: {
-          data: args.data,
-        },
-      })
-    },
+    updateRecipe: (_: undefined, args: any) => updateRecipe(args),
+    createMenu: (_: undefined, args: any) => createMenu(args),
   },
 }
 

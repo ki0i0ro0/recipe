@@ -21,3 +21,8 @@ model Recipe {
   user_id Int
   data    String
 }
+
+model Menu {
+  id      Int      @id @default(autoincrement())
+  name    String
+}
