@@ -1,5 +1,5 @@
 import { GET_RECIPE } from '@/graphql/get-recipe'
-import type { AppMenu, GetRecipe } from '@/types'
+import type { AppMenu, GetRecipe, RecipeData } from '@/types'
 import { useQuery } from '@apollo/client'
 import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0'
 import { AddCircle } from '@mui/icons-material'
@@ -27,10 +27,10 @@ const App = () => {
 
   useEffect(() => {
     if (data) {
-      const userMenus: [{ menuId: number; date: Date }] = JSON.parse(data?.recipe.data)
-      const cookedMenus = data?.menus.map((menu) => {
-        const cookedMenu = userMenus.find((userMenu) => userMenu.menuId === menu.id)
-        return { name: menu.name, date: cookedMenu?.date } as AppMenu
+      const userMenus: RecipeData[] = JSON.parse(data?.recipe.data)
+      const cookedMenus: AppMenu[] = data?.menus.map((menu) => {
+        const cookedMenu = userMenus.find((userMenu) => +userMenu.menuId === menu.id)
+        return { id: menu.id ?? 0, name: menu.name, date: cookedMenu?.date || '' }
       })
       setRows(cookedMenus || [])
     }

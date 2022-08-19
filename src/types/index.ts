@@ -1,5 +1,5 @@
 export interface Recipe {
-  id?: number
+  id: number
   data: string
 }
 
@@ -9,12 +9,12 @@ export interface DecodedRecipe {
 }
 
 export interface RecipeData {
-  menuId: number
-  date: Date
+  menuId: string
+  date: string
 }
 
 export interface Menu {
-  id?: number
+  id: number
   name: string
 }
 
@@ -24,9 +24,9 @@ export interface GetRecipe {
 }
 
 export interface AppMenu {
-  id?: number
+  id: number
   name: string
-  date: Date | undefined
+  date: string
 }
 
 export type Order = 'asc' | 'desc'

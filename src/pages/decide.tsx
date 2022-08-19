@@ -12,7 +12,6 @@ const App = () => {
   const [updateRecipe] = useMutation(UPDATE_RECIPE)
   const [recipe, setRecipe] = useState<DecodedRecipe>()
   const [menu, setMenu] = useState<Menu>()
-  const [appMenus, setAppMenu] = useState<AppMenu[]>([])
   const { data, loading, error } = useQuery<GetRecipe>(GET_RECIPE, {
     variables: {
       email: user?.email,
@@ -28,10 +27,9 @@ const App = () => {
     }
     setRecipe(decodedRecipe)
     const cookedMenus = data?.menus.map((menu) => {
-      const cookedMenu = recipeDataArray.find((recipeData) => recipeData.menuId === menu.id)
+      const cookedMenu = recipeDataArray.find((recipeData) => +recipeData.menuId === menu.id)
       return { id: menu.id, name: menu.name, date: cookedMenu?.date } as AppMenu
     })
-    setAppMenu(cookedMenus)
     const unCookedMenus = cookedMenus.filter((v) => !v.date)
     const todaysAppMenu = unCookedMenus[Math.floor(Math.random() * unCookedMenus.length)]
     const todaysMenu: Menu = { id: todaysAppMenu.id, name: todaysAppMenu.name }
@@ -47,11 +45,11 @@ const App = () => {
     if (recipe.data.length < 1) {
       recipe.data = []
     }
-    recipe.data.push({ menuId: id, date: new Date() })
+    recipe.data.push({ menuId: id.toString(), date: new Date().toLocaleDateString() })
     updateRecipe({
       variables: {
-        id: recipe.id,
-        data: JSON.stringify(data),
+        id: +recipe.id,
+        data: JSON.stringify(recipe.data),
       },
     })
     Router.push({ pathname: `/` })
