@@ -1,5 +1,6 @@
-import type { Menu, Recipe } from '@/types'
-import { gql, useQuery } from '@apollo/client'
+import { GET_RECIPE } from '@/graphql/get-recipe'
+import type { AppMenu, GetRecipe } from '@/types'
+import { useQuery } from '@apollo/client'
 import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0'
 import { AddCircle } from '@mui/icons-material'
 import {
@@ -15,32 +16,9 @@ import {
 import Router from 'next/router'
 import { useEffect, useState } from 'react'
 
-const GET_RECIPE = gql`
-  query getRecipe($email: String!) {
-    menus {
-      id
-      name
-    }
-    recipe(email: $email) {
-      id
-      data
-    }
-  }
-`
-
-interface GetRecipe {
-  menus: Menu[]
-  recipe: Recipe
-}
-
-interface Rows {
-  name: string
-  date: Date | undefined
-}
-
 const App = () => {
   const { user } = useUser()
-  const [rows, setRows] = useState<Rows[]>([])
+  const [rows, setRows] = useState<AppMenu[]>([])
   const { data, loading, error } = useQuery<GetRecipe>(GET_RECIPE, {
     variables: {
       email: user?.email,
@@ -52,7 +30,7 @@ const App = () => {
       const userMenus: [{ menuId: number; date: Date }] = JSON.parse(data?.recipe.data)
       const cookedMenus = data?.menus.map((menu) => {
         const cookedMenu = userMenus.find((userMenu) => userMenu.menuId === menu.id)
-        return { name: menu.name, date: cookedMenu?.date } as Rows
+        return { name: menu.name, date: cookedMenu?.date } as AppMenu
       })
       setRows(cookedMenus || [])
     }
