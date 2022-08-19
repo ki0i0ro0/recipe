@@ -1,5 +1,6 @@
+import type { Menu, Recipe } from '@/types'
 import { gql, useQuery } from '@apollo/client'
-import { withPageAuthRequired, useUser } from '@auth0/nextjs-auth0'
+import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0'
 import { AddCircle } from '@mui/icons-material'
 import {
   CircularProgress,
@@ -12,9 +13,14 @@ import {
   TableRow,
 } from '@mui/material'
 import Router from 'next/router'
+import { useEffect, useState } from 'react'
 
 const GET_RECIPE = gql`
   query getRecipe($email: String!) {
+    menus {
+      id
+      name
+    }
     recipe(email: $email) {
       id
       data
@@ -22,19 +28,40 @@ const GET_RECIPE = gql`
   }
 `
 
+interface GetRecipe {
+  menus: Menu[]
+  recipe: Recipe
+}
+
+interface Rows {
+  name: string
+  date: Date | undefined
+}
+
 const App = () => {
   const { user } = useUser()
-  const { data, loading, error } = useQuery<any>(GET_RECIPE, {
+  const [rows, setRows] = useState<Rows[]>([])
+  const { data, loading, error } = useQuery<GetRecipe>(GET_RECIPE, {
     variables: {
       email: user?.email,
     },
   })
 
+  useEffect(() => {
+    if (data) {
+      const userMenus: [{ menuId: number; date: Date }] = JSON.parse(data?.recipe.data)
+      const cookedMenus = data?.menus.map((menu) => {
+        const cookedMenu = userMenus.find((userMenu) => userMenu.menuId === menu.id)
+        return { name: menu.name, date: cookedMenu?.date } as Rows
+      })
+      setRows(cookedMenus || [])
+    }
+  }, [data])
+
   if (loading) return <CircularProgress />
   if (error) return <p>エラーが発生しています</p>
   if (!data) return <CircularProgress />
 
-  const rows: any[] = JSON.parse(data.recipe.data)
   const handleCreate = () => {
     Router.push({ pathname: `/create` })
   }
@@ -62,7 +89,7 @@ const App = () => {
               return (
                 <TableRow onClick={(event) => console.log(event)} key={row.name}>
                   <TableCell>{row.name || 'N/A'}</TableCell>
-                  <TableCell>{new Date(row.updatedAt).toLocaleDateString()}</TableCell>
+                  <TableCell>{row.date ? new Date(row.date).toLocaleDateString() : null}</TableCell>
                 </TableRow>
               )
             })}
