@@ -68,6 +68,7 @@ const App = () => {
 
   return (
     <>
+      {/* Menu add Button */}
       <IconButton
         sx={{ position: 'absolute', bottom: 16, right: 16 }}
         color="info"
@@ -75,7 +76,7 @@ const App = () => {
       >
         <AddCircle fontSize="large" />
       </IconButton>
-
+      {/* Menu List */}
       <TableContainer>
         <Table>
           <TableHead>
