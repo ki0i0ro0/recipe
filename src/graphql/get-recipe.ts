@@ -8,7 +8,8 @@ export const GET_RECIPE = gql`
     }
     recipe(email: $email) {
       id
-      data
+      menu_id
+      created_at
     }
   }
 `

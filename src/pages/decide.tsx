@@ -1,6 +1,7 @@
+import { ADD_USER_RECIPE } from '@/graphql/add-user-recipe'
 import { GET_RECIPE } from '@/graphql/get-recipe'
 import { UPDATE_RECIPE } from '@/graphql/update-recipe'
-import type { AppMenu, DecodedRecipe, GetRecipe, Menu, Recipe, RecipeData } from '@/types'
+import type { AppMenu, GetRecipe, Menu, Recipe } from '@/types'
 import { useMutation, useQuery } from '@apollo/client'
 import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0'
 import { Button, CircularProgress } from '@mui/material'
@@ -9,8 +10,7 @@ import { useEffect, useState } from 'react'
 
 const App = () => {
   const { user } = useUser()
-  const [updateRecipe] = useMutation(UPDATE_RECIPE)
-  const [recipe, setRecipe] = useState<DecodedRecipe>()
+  const [addUserRecipe] = useMutation(ADD_USER_RECIPE)
   const [menu, setMenu] = useState<Menu>()
   const { data, loading, error } = useQuery<GetRecipe>(GET_RECIPE, {
     variables: {
@@ -20,19 +20,19 @@ const App = () => {
 
   useEffect(() => {
     if (!data) return
-    const recipeDataArray = JSON.parse(data?.recipe.data) as RecipeData[]
-    const decodedRecipe: DecodedRecipe = {
-      id: data?.recipe.id ?? 0,
-      data: recipeDataArray,
-    }
-    setRecipe(decodedRecipe)
-    const cookedMenus = data?.menus.map((menu) => {
-      const cookedMenu = recipeDataArray.find((recipeData) => +recipeData.menuId === menu.id)
-      return { id: menu.id, name: menu.name, date: cookedMenu?.date } as AppMenu
+    const cookedMenus: AppMenu[] = data?.menus.map((menu) => {
+      const cookedMenu = data?.recipe.find((userMenu) => userMenu.menu_id === menu.id)
+      return {
+        menuId: menu.id ?? 0,
+        menuName: menu.name,
+        createdAt: cookedMenu?.created_at || '',
+        recipeId: cookedMenu?.id,
+      }
     })
-    const unCookedMenus = cookedMenus.filter((v) => !v.date)
+
+    const unCookedMenus = cookedMenus.filter((v) => !v.createdAt)
     const todaysAppMenu = unCookedMenus[Math.floor(Math.random() * unCookedMenus.length)]
-    const todaysMenu: Menu = { id: todaysAppMenu.id, name: todaysAppMenu.name }
+    const todaysMenu: Menu = { id: todaysAppMenu.menuId, name: todaysAppMenu.menuName }
     setMenu(todaysMenu)
   }, [data])
 
@@ -40,16 +40,11 @@ const App = () => {
   if (error) return <p>エラーが発生しています</p>
   if (!data) return <CircularProgress />
 
-  const handleUpdate = (id: number) => {
-    if (!recipe) return
-    if (recipe.data.length < 1) {
-      recipe.data = []
-    }
-    recipe.data.push({ menuId: id.toString(), date: new Date().toLocaleDateString() })
-    updateRecipe({
+  const handleUpdate = async (id: number) => {
+    await addUserRecipe({
       variables: {
-        id: +recipe.id,
-        data: JSON.stringify(recipe.data),
+        email: user?.email,
+        menuId: id,
       },
     })
     Router.push({ pathname: `/` })

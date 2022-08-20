@@ -1,5 +1,5 @@
 import { GET_RECIPE } from '@/graphql/get-recipe'
-import type { AppMenu, GetRecipe, RecipeData } from '@/types'
+import type { AppMenu, GetRecipe } from '@/types'
 import { useQuery } from '@apollo/client'
 import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0'
 import { AddCircle } from '@mui/icons-material'
@@ -27,10 +27,14 @@ const App = () => {
 
   useEffect(() => {
     if (data) {
-      const userMenus: RecipeData[] = JSON.parse(data?.recipe.data)
       const cookedMenus: AppMenu[] = data?.menus.map((menu) => {
-        const cookedMenu = userMenus.find((userMenu) => +userMenu.menuId === menu.id)
-        return { id: menu.id ?? 0, name: menu.name, date: cookedMenu?.date || '' }
+        const cookedMenu = data?.recipe.find((userMenu) => userMenu.menu_id === menu.id)
+        return {
+          menuId: menu.id ?? 0,
+          menuName: menu.name,
+          createdAt: cookedMenu?.created_at || '',
+          recipeId: cookedMenu?.id,
+        }
       })
       setRows(cookedMenus || [])
     }
@@ -66,9 +70,11 @@ const App = () => {
           <TableBody>
             {rows.map((row) => {
               return (
-                <TableRow onClick={(event) => console.log(event)} key={row.name}>
-                  <TableCell>{row.name || 'N/A'}</TableCell>
-                  <TableCell>{row.date ? new Date(row.date).toLocaleDateString() : null}</TableCell>
+                <TableRow onClick={(event) => console.log(event)} key={row.menuId}>
+                  <TableCell>{row.menuName || 'N/A'}</TableCell>
+                  <TableCell>
+                    {row.createdAt ? new Date(row.createdAt).toLocaleDateString() : null}
+                  </TableCell>
                 </TableRow>
               )
             })}

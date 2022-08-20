@@ -1,16 +1,7 @@
 export interface Recipe {
   id: number
-  data: string
-}
-
-export interface DecodedRecipe {
-  id: number
-  data: RecipeData[]
-}
-
-export interface RecipeData {
-  menuId: string
-  date: string
+  menu_id: number
+  created_at: string
 }
 
 export interface Menu {
@@ -20,13 +11,14 @@ export interface Menu {
 
 export interface GetRecipe {
   menus: Menu[]
-  recipe: Recipe
+  recipe: Recipe[]
 }
 
 export interface AppMenu {
-  id: number
-  name: string
-  date: string
+  menuId: number
+  menuName: string
+  createdAt: string
+  recipeId?: number
 }
 
 export type Order = 'asc' | 'desc'
