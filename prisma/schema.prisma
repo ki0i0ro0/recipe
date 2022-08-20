@@ -17,9 +17,10 @@ model User {
 }
 
 model Recipe {
-  id      Int      @id @default(autoincrement())
-  user_id Int
-  data    String
+  id          Int      @id @default(autoincrement())
+  user_id     Int
+  menu_id     Int
+  created_at  DateTime @default(now())
 }
 
 model Menu {

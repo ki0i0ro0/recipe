@@ -7,22 +7,24 @@ const prisma = new PrismaClient()
 const typeDefs = gql`
   type Recipe {
     id: ID!
-    data: String
+    menu_id: Int!
+    created_at: String!
   }
 
   type Menu {
     id: ID!
-    name: String
+    name: String!
   }
 
   type Query {
-    recipe(email: String!): Recipe
+    recipe(email: String!): [Recipe]
     menus: [Menu]
   }
 
   type Mutation {
-    updateRecipe(id: Int!, data: String): Recipe
+    addUserRecipe(email: String!, menuId: Int!): Recipe
     createMenu(name: String!): Menu
+    resetUserRecipe(email: String!): [Recipe]
   }
 `
 
@@ -38,27 +40,41 @@ const getRecipe = async (args: { email: string }) => {
       email,
     },
   })
-  return prisma.recipe.findFirst({
+  return prisma.recipe.findMany({
     where: {
       user_id: user?.id,
     },
   })
 }
 
-/**
- * レシピ履歴更新
- * @param args
- * @returns
- */
-const updateRecipe = (args: { id: number; data?: string }) =>
-  prisma.recipe.update({
+const addUserRecipe = async (args: { email: string; menuId: number }) => {
+  const { email } = args
+  const user = await prisma.user.findFirst({
     where: {
-      id: args.id,
-    },
-    data: {
-      data: args.data,
+      email,
     },
   })
+  return prisma.recipe.create({
+    data: {
+      user_id: user?.id ?? 0,
+      menu_id: args.menuId,
+    },
+  })
+}
+
+const resetUserRecipe = async (args: { email: string }) => {
+  const { email } = args
+  const user = await prisma.user.findFirst({
+    where: {
+      email,
+    },
+  })
+  return prisma.recipe.deleteMany({
+    where: {
+      user_id: user?.id,
+    },
+  })
+}
 
 /**
  * メニュー作成
@@ -78,8 +94,9 @@ const resolvers = {
     menus: () => prisma.menu.findMany(),
   },
   Mutation: {
-    updateRecipe: (_: undefined, args: any) => updateRecipe(args),
+    addUserRecipe: (_: undefined, args: any) => addUserRecipe(args),
     createMenu: (_: undefined, args: any) => createMenu(args),
+    resetUserRecipe: (_: undefined, args: any) => resetUserRecipe(args),
   },
 }
 
