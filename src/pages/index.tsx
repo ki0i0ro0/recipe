@@ -36,6 +36,7 @@ const App = () => {
           recipeId: cookedMenu?.id,
         }
       })
+      cookedMenus.sort((a, b) => (a.createdAt < b.createdAt ? -1 : 1))
       setRows(cookedMenus || [])
     }
   }, [data])
