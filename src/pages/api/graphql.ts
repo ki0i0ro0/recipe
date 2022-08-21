@@ -6,13 +6,13 @@ const prisma = new PrismaClient()
 
 const typeDefs = gql`
   type Recipe {
-    id: ID!
+    id: Int!
     menu_id: Int!
     created_at: String!
   }
 
   type Menu {
-    id: ID!
+    id: Int!
     name: String!
   }
 
