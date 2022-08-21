@@ -1,6 +1,5 @@
 import { ADD_USER_RECIPE } from '@/graphql/add-user-recipe'
 import { GET_RECIPE } from '@/graphql/get-recipe'
-import { UPDATE_RECIPE } from '@/graphql/update-recipe'
 import type { AppMenu, GetRecipe, Menu, Recipe } from '@/types'
 import { useMutation, useQuery } from '@apollo/client'
 import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0'
@@ -50,20 +49,18 @@ const App = () => {
     Router.push({ pathname: `/` })
   }
 
-  const handleCancel = () => {}
-
   return (
     <>
       <p>{menu?.id}</p>
       <p>{menu?.name}</p>
       <Button
         onClick={() => {
-          handleUpdate(menu?.id ?? 0)
+          handleUpdate(menu?.id ? +menu?.id : 0)
         }}
       >
         OK
       </Button>
-      <Button onClick={handleCancel}>Cancel</Button>
+      <Button href="/">Cancel</Button>
     </>
   )
 }

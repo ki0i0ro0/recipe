@@ -18,12 +18,12 @@ const CREATE_MENU = gql`
 `
 
 const App = () => {
-  const initialValues: Menu = { name: '' }
+  const initialValues: Menu = { id: 0, name: '' }
   const [createMenuHook] = useMutation(CREATE_MENU)
 
   const createMenu = async (value: Menu, setLoading: Dispatch<SetStateAction<boolean>>) => {
     setLoading(true)
-    createMenuHook({
+    await createMenuHook({
       variables: {
         name: value.name,
       },

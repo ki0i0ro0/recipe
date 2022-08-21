@@ -2,7 +2,7 @@ import { GET_RECIPE } from '@/graphql/get-recipe'
 import type { AppMenu, GetRecipe } from '@/types'
 import { useQuery } from '@apollo/client'
 import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0'
-import { AddCircle } from '@mui/icons-material'
+import { AddCircle, AutoMode } from '@mui/icons-material'
 import {
   CircularProgress,
   IconButton,
@@ -28,7 +28,7 @@ const App = () => {
   useEffect(() => {
     if (data) {
       const cookedMenus: AppMenu[] = data?.menus.map((menu) => {
-        const cookedMenu = data?.recipe.find((userMenu) => userMenu.menu_id === menu.id)
+        const cookedMenu = data?.recipe.find((userMenu) => +userMenu.menu_id === +menu.id)
         return {
           menuId: menu.id ?? 0,
           menuName: menu.name,
@@ -45,7 +45,7 @@ const App = () => {
   if (!data) return <CircularProgress />
 
   const handleCreate = () => {
-    Router.push({ pathname: `/create` })
+    Router.push({ pathname: `/add` })
   }
 
   return (
@@ -57,6 +57,9 @@ const App = () => {
         onClick={handleCreate}
       >
         <AddCircle fontSize="large" />
+      </IconButton>
+      <IconButton sx={{ position: 'absolute', bottom: 16, left: 16 }} color="info" href="./decide">
+        <AutoMode fontSize="large" />
       </IconButton>
       {/* Menu List */}
       <TableContainer>
@@ -73,7 +76,7 @@ const App = () => {
                 <TableRow onClick={(event) => console.log(event)} key={row.menuId}>
                   <TableCell>{row.menuName || 'N/A'}</TableCell>
                   <TableCell>
-                    {row.createdAt ? new Date(row.createdAt).toLocaleDateString() : null}
+                    {row.createdAt ? new Date(+row.createdAt).toLocaleDateString() : null}
                   </TableCell>
                 </TableRow>
               )
