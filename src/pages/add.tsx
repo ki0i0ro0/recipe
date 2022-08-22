@@ -37,7 +37,7 @@ const App = () => {
       <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
         <Add />
       </Avatar>
-      <Typography textAlign="center">レシピを追加</Typography>
+      <Typography textAlign="center">メニューを追加</Typography>
       <MyForm initialValues={initialValues} onSubmit={createMenu} type="create" />
     </BasePage>
   )
