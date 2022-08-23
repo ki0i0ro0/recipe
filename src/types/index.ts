@@ -18,7 +18,7 @@ export interface AppMenu {
   menuId: number
   menuName: string
   createdAt: string
-  recipeId?: number
+  recipeId: number
 }
 
 export type Order = 'asc' | 'desc'

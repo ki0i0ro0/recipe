@@ -25,7 +25,7 @@ const App = () => {
         menuId: menu.id ?? 0,
         menuName: menu.name,
         createdAt: cookedMenu?.created_at || '',
-        recipeId: cookedMenu?.id,
+        recipeId: cookedMenu?.id ?? 0,
       }
     })
 

@@ -13,11 +13,12 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material'
-import Router from 'next/router'
+import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 
 const App = () => {
   const { user } = useUser()
+  const router = useRouter()
   const [rows, setRows] = useState<AppMenu[]>([])
   const { data, loading, error } = useQuery<GetRecipe>(GET_RECIPE, {
     variables: {
@@ -33,7 +34,7 @@ const App = () => {
           menuId: menu.id ?? 0,
           menuName: menu.name,
           createdAt: cookedMenu?.created_at || '',
-          recipeId: cookedMenu?.id,
+          recipeId: cookedMenu?.id ?? 0,
         }
       })
       cookedMenus.sort((a, b) => (a.createdAt < b.createdAt ? -1 : 1))
@@ -46,7 +47,7 @@ const App = () => {
   if (!data) return <CircularProgress />
 
   const handleCreate = () => {
-    Router.push({ pathname: `/add` })
+    router.push({ pathname: `/add` })
   }
 
   return (
@@ -75,7 +76,9 @@ const App = () => {
             {rows.map((row) => {
               return (
                 <TableRow onClick={(event) => console.log(event)} key={row.menuId}>
-                  <TableCell>{row.menuName || 'N/A'}</TableCell>
+                  <TableCell>
+                    <a href={`/update/${row.menuId}/${row.recipeId}`}>{row.menuName}</a>
+                  </TableCell>
                   <TableCell>
                     {row.createdAt ? new Date(+row.createdAt).toLocaleDateString() : null}
                   </TableCell>
