@@ -18,11 +18,13 @@ const typeDefs = gql`
 
   type Query {
     recipe(email: String!): [Recipe]
+    menu(id: Int!): Menu
     menus: [Menu]
   }
 
   type Mutation {
     addUserRecipe(email: String!, menuId: Int!): Recipe
+    removeUserRecipe(email: String!, recipeId: Int!): Recipe
     createMenu(name: String!): Menu
     resetUserRecipe(email: String!): [Recipe]
   }
@@ -62,6 +64,15 @@ const addUserRecipe = async (args: { email: string; menuId: number }) => {
   })
 }
 
+const removeUserRecipe = async (args: { recipeId: number }) => {
+  const { recipeId } = args
+  return prisma.recipe.delete({
+    where: {
+      id: recipeId,
+    },
+  })
+}
+
 const resetUserRecipe = async (args: { email: string }) => {
   const { email } = args
   const user = await prisma.user.findFirst({
@@ -91,10 +102,12 @@ const createMenu = (args: { name: string }) =>
 const resolvers = {
   Query: {
     recipe: (_: undefined, args: any) => getRecipe(args),
+    menu: (_: undefined, args: any) => prisma.menu.findFirst({ where: { id: args.id } }),
     menus: () => prisma.menu.findMany(),
   },
   Mutation: {
     addUserRecipe: (_: undefined, args: any) => addUserRecipe(args),
+    removeUserRecipe: (_: undefined, args: any) => removeUserRecipe(args),
     createMenu: (_: undefined, args: any) => createMenu(args),
     resetUserRecipe: (_: undefined, args: any) => resetUserRecipe(args),
   },
