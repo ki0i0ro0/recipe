@@ -1,21 +1,13 @@
 import BasePage from '@/components/BasePage'
+import { CREATE_MENU } from '@/graphql/create-menu'
 import type { Menu } from '@/types'
-import { gql, useMutation } from '@apollo/client'
+import { useMutation } from '@apollo/client'
 import { withPageAuthRequired } from '@auth0/nextjs-auth0'
 import { Add } from '@mui/icons-material'
 import { Avatar, Typography } from '@mui/material'
 import Router from 'next/router'
 import { type Dispatch, type SetStateAction } from 'react'
 import MyForm from '../components/BaseForm'
-
-const CREATE_MENU = gql`
-  mutation Mutation($name: String!) {
-    createMenu(name: $name) {
-      id
-      name
-    }
-  }
-`
 
 const App = () => {
   const initialValues: Menu = { id: 0, name: '' }
