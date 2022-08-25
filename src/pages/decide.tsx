@@ -1,13 +1,15 @@
-import { ADD_USER_RECIPE } from '@/graphql/add-user-recipe'
-import { GET_RECIPE } from '@/graphql/get-recipe'
-import type { AppMenu, GetRecipe, Menu, Recipe } from '@/types'
 import { useMutation, useQuery } from '@apollo/client'
 import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0'
-import { Button, CircularProgress } from '@mui/material'
-import Router from 'next/router'
+import { Box, Button } from '@mui/material'
+import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
+import { BaseLoading } from '@/components/BaseLoading'
+import { ADD_USER_RECIPE } from '@/graphql/add-user-recipe'
+import { GET_RECIPE } from '@/graphql/get-recipe'
+import type { AppMenu, GetRecipe, Menu } from '@/types'
 
 const App = () => {
+  const router = useRouter()
   const { user } = useUser()
   const [addUserRecipe] = useMutation(ADD_USER_RECIPE)
   const [menu, setMenu] = useState<Menu>()
@@ -35,9 +37,9 @@ const App = () => {
     setMenu(todaysMenu)
   }, [data])
 
-  if (loading) return <CircularProgress />
+  if (loading) return <BaseLoading />
   if (error) return <p>エラーが発生しています</p>
-  if (!data) return <CircularProgress />
+  if (!data) return <BaseLoading />
 
   const handleUpdate = async (id: number) => {
     await addUserRecipe({
@@ -46,7 +48,7 @@ const App = () => {
         menuId: id,
       },
     })
-    Router.push({ pathname: `/` })
+    router.push({ pathname: `/` })
   }
 
   return (
@@ -66,6 +68,6 @@ const App = () => {
 }
 
 export default withPageAuthRequired(App, {
-  onRedirecting: () => <div>Loading...</div>,
-  onError: (error) => <div>{error.message}</div>,
+  onRedirecting: () => <BaseLoading />,
+  onError: (error) => <Box>{error.message}</Box>,
 })

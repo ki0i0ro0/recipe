@@ -1,15 +1,16 @@
-import BasePage from '@/components/BasePage'
-import { ADD_USER_RECIPE } from '@/graphql/add-user-recipe'
-import { GET_MENU } from '@/graphql/get-menu'
-import { REMOVE_USER_RECIPE } from '@/graphql/remove-user-recipe'
-import type { Menu } from '@/types'
 import { useMutation, useQuery } from '@apollo/client'
 import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0'
 import { Delete, Edit } from '@mui/icons-material'
 import { LoadingButton } from '@mui/lab'
-import { Avatar, Typography } from '@mui/material'
+import { Avatar, Box, Typography } from '@mui/material'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
+import { BaseLoading } from '@/components/BaseLoading'
+import { BasePage } from '@/components/BasePage'
+import { ADD_USER_RECIPE } from '@/graphql/add-user-recipe'
+import { GET_MENU } from '@/graphql/get-menu'
+import { REMOVE_USER_RECIPE } from '@/graphql/remove-user-recipe'
+import type { Menu } from '@/types'
 
 const App = () => {
   const { user } = useUser()
@@ -47,9 +48,9 @@ const App = () => {
     router.push({ pathname: '/' })
   }
 
-  if (loading) return <p>Loading...</p>
-  if (error) return <p>Error :(</p>
-  if (!data) return <p>Loading...</p>
+  if (loading) return <BaseLoading />
+  if (error) return <p>Error</p>
+  if (!data) return <BaseLoading />
 
   return (
     <BasePage>
@@ -84,6 +85,6 @@ const App = () => {
 }
 
 export default withPageAuthRequired(App, {
-  onRedirecting: () => <div>Loading...</div>,
-  onError: (error) => <div>{error.message}</div>,
+  onRedirecting: () => <BaseLoading />,
+  onError: (error) => <Box>{error.message}</Box>,
 })

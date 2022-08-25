@@ -1,10 +1,8 @@
-import { GET_RECIPE } from '@/graphql/get-recipe'
-import type { AppMenu, GetRecipe } from '@/types'
 import { useQuery } from '@apollo/client'
 import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0'
 import { AddCircle, AutoMode } from '@mui/icons-material'
 import {
-  CircularProgress,
+  Box,
   IconButton,
   Table,
   TableBody,
@@ -15,6 +13,9 @@ import {
 } from '@mui/material'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
+import { BaseLoading } from '@/components/BaseLoading'
+import { GET_RECIPE } from '@/graphql/get-recipe'
+import type { AppMenu, GetRecipe } from '@/types'
 
 const App = () => {
   const { user } = useUser()
@@ -42,9 +43,9 @@ const App = () => {
     }
   }, [data])
 
-  if (loading) return <CircularProgress />
+  if (loading) return <BaseLoading />
   if (error) return <p>エラーが発生しています</p>
-  if (!data) return <CircularProgress />
+  if (!data) return <BaseLoading />
 
   const handleCreate = () => {
     router.push({ pathname: `/add` })
@@ -93,6 +94,6 @@ const App = () => {
 }
 
 export default withPageAuthRequired(App, {
-  onRedirecting: () => <div>Loading...</div>,
-  onError: (error) => <div>{error.message}</div>,
+  onRedirecting: () => <BaseLoading />,
+  onError: (error) => <Box>{error.message}</Box>,
 })

@@ -3,8 +3,8 @@ import { LoadingButton } from '@mui/lab'
 import { Stack, TextField } from '@mui/material'
 import { useFormik } from 'formik'
 import { Dispatch, SetStateAction, useState } from 'react'
-import { Menu } from '@/types'
 import * as Yup from 'yup'
+import { Menu } from '@/types'
 
 const FORM_SCHEMA = Yup.object({
   name: Yup.string().required(),
@@ -16,7 +16,7 @@ interface Props {
   type: string
 }
 
-const BookForm = (props: Props): JSX.Element => {
+export const BaseForm = (props: Props): JSX.Element => {
   const { initialValues, onSubmit, type = 'create' } = props
   const [loading, setLoading] = useState(false)
   const formik = useFormik({
@@ -53,5 +53,3 @@ const BookForm = (props: Props): JSX.Element => {
     </form>
   )
 }
-
-export default BookForm
