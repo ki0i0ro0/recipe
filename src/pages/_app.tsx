@@ -1,6 +1,8 @@
-import type { AppProps } from 'next/app'
-import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client'
+import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client'
 import { UserProvider } from '@auth0/nextjs-auth0'
+import type { AppProps } from 'next/app'
+import Head from 'next/head'
+import '../styles/globals.css'
 
 const client = new ApolloClient({
   uri: '/api/graphql',
@@ -9,11 +11,17 @@ const client = new ApolloClient({
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <UserProvider>
-      <ApolloProvider client={client}>
-        <Component {...pageProps} />
-      </ApolloProvider>
-    </UserProvider>
+    <>
+      <Head>
+        <link rel="apple-touch-icon" type="image/png" href="favicon.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="favicon.png" />
+      </Head>
+      <UserProvider>
+        <ApolloProvider client={client}>
+          <Component {...pageProps} />
+        </ApolloProvider>
+      </UserProvider>
+    </>
   )
 }
 
