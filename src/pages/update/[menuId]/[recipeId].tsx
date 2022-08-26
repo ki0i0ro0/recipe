@@ -12,6 +12,10 @@ import { GET_MENU } from '@/graphql/get-menu'
 import { REMOVE_USER_RECIPE } from '@/graphql/remove-user-recipe'
 import type { Menu } from '@/types'
 
+interface Data {
+  menu: Menu
+}
+
 const App = () => {
   const { user } = useUser()
   const router = useRouter()
@@ -21,7 +25,7 @@ const App = () => {
 
   const { menuId, recipeId } = router.query
 
-  const { loading, error, data } = useQuery<Menu>(GET_MENU, { variables: { id: menuId } })
+  const { loading, error, data } = useQuery<Data>(GET_MENU, { variables: { id: Number(menuId) } })
 
   // レシピ作成
   const handleAddUserRecipe = async (menuId: number) => {
@@ -29,7 +33,7 @@ const App = () => {
     await addUserRecipe({
       variables: {
         email: user?.email,
-        menu_id: menuId,
+        menuId: menuId,
       },
     })
     setProcessing(false)
@@ -58,10 +62,10 @@ const App = () => {
         <Edit />
       </Avatar>
       <Typography textAlign="center">レシピを編集</Typography>
-      <p>{data.name}</p>
+      <p>{data.menu.name}</p>
       {recipeId === '0' ? (
         <LoadingButton
-          onClick={() => handleAddUserRecipe(data.id)}
+          onClick={() => handleAddUserRecipe(data.menu.id)}
           variant="contained"
           startIcon={<Edit />}
           type="submit"
