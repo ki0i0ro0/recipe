@@ -15,7 +15,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Head>
         <title>Recipe App</title>
         <link rel="apple-touch-icon" type="image/png" href="favicon.png" />
-        <link rel="icon" type="image/png" sizes="16x16" href="favicon.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="favicon.ico" />
       </Head>
       <UserProvider>
         <ApolloProvider client={client}>
