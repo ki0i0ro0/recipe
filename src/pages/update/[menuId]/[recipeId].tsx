@@ -45,7 +45,8 @@ const App = () => {
     setProcessing(true)
     await removeUserRecipe({
       variables: {
-        id: recipeId,
+        email: user?.email,
+        recipeId: recipeId,
       },
     })
     setProcessing(false)
