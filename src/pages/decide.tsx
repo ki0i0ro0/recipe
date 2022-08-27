@@ -1,9 +1,12 @@
 import { useMutation, useQuery } from '@apollo/client'
 import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0'
-import { Box, Button } from '@mui/material'
+import { AutoMode } from '@mui/icons-material'
+import { LoadingButton } from '@mui/lab'
+import { Avatar, Box, Button, Typography } from '@mui/material'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { BaseLoading } from '@/components/BaseLoading'
+import { BasePage } from '@/components/BasePage'
 import { ADD_USER_RECIPE } from '@/graphql/add-user-recipe'
 import { GET_RECIPE } from '@/graphql/get-recipe'
 import type { AppMenu, GetRecipe, Menu } from '@/types'
@@ -52,18 +55,30 @@ const App = () => {
   }
 
   return (
-    <>
-      <p>{menu?.id}</p>
-      <p>{menu?.name}</p>
-      <Button
-        onClick={() => {
-          handleUpdate(menu?.id ? +menu?.id : 0)
-        }}
-      >
-        OK
-      </Button>
-      <Button href="/">Cancel</Button>
-    </>
+    <BasePage>
+      <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+        <AutoMode />
+      </Avatar>
+      <Box>
+        <Typography color="text.secondary" gutterBottom>
+          本日のおすすめメニューは
+        </Typography>
+        <Typography variant="h5" component="div" gutterBottom>
+          {menu?.name}
+        </Typography>
+        <Typography color="text.secondary" gutterBottom>
+          登録しますか？
+        </Typography>
+        <LoadingButton
+          onClick={() => {
+            handleUpdate(menu?.id ? +menu?.id : 0)
+          }}
+        >
+          OK
+        </LoadingButton>
+        <Button href="/">Cancel</Button>
+      </Box>
+    </BasePage>
   )
 }
 

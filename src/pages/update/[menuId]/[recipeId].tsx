@@ -1,8 +1,8 @@
 import { useMutation, useQuery } from '@apollo/client'
 import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0'
-import { Delete, Edit } from '@mui/icons-material'
+import { Add, Delete } from '@mui/icons-material'
 import { LoadingButton } from '@mui/lab'
-import { Avatar, Box, Typography } from '@mui/material'
+import { Avatar, Box, Button, Typography } from '@mui/material'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { BaseLoading } from '@/components/BaseLoading'
@@ -57,34 +57,37 @@ const App = () => {
   if (error) return <p>Error</p>
   if (!data) return <BaseLoading />
 
+  const isCreateMode = recipeId === '0'
+
   return (
     <BasePage>
       <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-        <Edit />
+        {isCreateMode ? <Add /> : <Delete />}
       </Avatar>
-      <Typography textAlign="center">レシピを編集</Typography>
-      <p>{data.menu.name}</p>
-      {recipeId === '0' ? (
+      <Typography color="text.secondary">履歴編集</Typography>
+      <Box>
+        <Typography variant="h5" component="div" mt={2} gutterBottom>
+          {data.menu.name}
+        </Typography>
+        <Typography color="text.secondary" gutterBottom>
+          {isCreateMode ? 'を作りましたか？' : 'を取り消しますか？'}
+        </Typography>
         <LoadingButton
-          onClick={() => handleAddUserRecipe(data.menu.id)}
-          variant="contained"
-          startIcon={<Edit />}
-          type="submit"
+          onClick={() => {
+            if (isCreateMode) {
+              handleAddUserRecipe(data.menu.id)
+            } else {
+              handleRemoveUserRecipe(typeof recipeId === 'string' ? +recipeId : 0)
+            }
+          }}
           loading={processing}
         >
-          追加
+          OK
         </LoadingButton>
-      ) : (
-        <LoadingButton
-          onClick={() => handleRemoveUserRecipe(typeof recipeId === 'string' ? +recipeId : 0)}
-          variant="contained"
-          startIcon={<Delete />}
-          type="submit"
-          loading={processing}
-        >
-          取消
-        </LoadingButton>
-      )}
+        <Button disabled={processing} href="/">
+          Cancel
+        </Button>
+      </Box>
     </BasePage>
   )
 }

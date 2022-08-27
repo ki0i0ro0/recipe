@@ -41,12 +41,7 @@ export const BaseForm = (props: Props): JSX.Element => {
         required
       />
       <Stack>
-        <LoadingButton
-          variant="contained"
-          startIcon={buttonSetting.icon}
-          type="submit"
-          loading={loading}
-        >
+        <LoadingButton startIcon={buttonSetting.icon} loading={loading}>
           {buttonSetting.title}
         </LoadingButton>
       </Stack>
