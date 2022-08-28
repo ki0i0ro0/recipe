@@ -16,11 +16,19 @@ const App = () => {
   const { user } = useUser()
   const [addUserRecipe] = useMutation(ADD_USER_RECIPE)
   const [menu, setMenu] = useState<Menu>()
+  const [unCookedMenus, setUnCookedMenus] = useState<AppMenu[]>([])
   const { data, loading, error } = useQuery<GetRecipe>(GET_RECIPE, {
     variables: {
       email: user?.email,
     },
   })
+
+  const ShuffleMenu = (unCookedMenus: AppMenu[]) => {
+    if (unCookedMenus.length < 1) return
+    const todaysAppMenu = unCookedMenus[Math.floor(Math.random() * unCookedMenus.length)]
+    const todaysMenu: Menu = { id: todaysAppMenu.menuId, name: todaysAppMenu.menuName }
+    setMenu(todaysMenu)
+  }
 
   useEffect(() => {
     if (!data) return
@@ -35,9 +43,8 @@ const App = () => {
     })
 
     const unCookedMenus = cookedMenus.filter((v) => !v.createdAt)
-    const todaysAppMenu = unCookedMenus[Math.floor(Math.random() * unCookedMenus.length)]
-    const todaysMenu: Menu = { id: todaysAppMenu.menuId, name: todaysAppMenu.menuName }
-    setMenu(todaysMenu)
+    setUnCookedMenus(unCookedMenus)
+    ShuffleMenu(unCookedMenus)
   }, [data])
 
   if (loading) return <BaseLoading />
@@ -77,6 +84,7 @@ const App = () => {
           OK
         </LoadingButton>
         <Button href="/">Cancel</Button>
+        <Button onClick={() => ShuffleMenu(unCookedMenus)}>Retry</Button>
       </Box>
     </BasePage>
   )
