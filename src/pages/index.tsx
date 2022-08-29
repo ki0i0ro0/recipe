@@ -61,7 +61,11 @@ const App = () => {
       >
         <AddCircle fontSize="large" />
       </IconButton>
-      <IconButton sx={{ position: 'absolute', bottom: 16, left: 16 }} color="info" href="./decide">
+      <IconButton
+        sx={{ position: 'absolute', bottom: 16, left: 16 }}
+        color="info"
+        href="./recipe/decide"
+      >
         <AutoMode fontSize="large" />
       </IconButton>
       {/* Menu List */}
@@ -78,7 +82,7 @@ const App = () => {
               return (
                 <TableRow onClick={(event) => console.log(event)} key={row.menuId}>
                   <TableCell>
-                    <a href={`/update/${row.menuId}/${row.recipeId}`}>{row.menuName}</a>
+                    <a href={`/recipe/update/${row.menuId}/${row.recipeId}`}>{row.menuName}</a>
                   </TableCell>
                   <TableCell>
                     {row.createdAt ? new Date(+row.createdAt).toLocaleDateString() : null}
