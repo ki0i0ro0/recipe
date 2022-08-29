@@ -14,7 +14,7 @@ import {
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { BaseLoading } from '@/components/BaseLoading'
-import { GET_RECIPE } from '@/graphql/get-recipe'
+import { GET_RECIPE } from '@/graphql/recipe/get'
 import type { AppMenu, GetRecipe } from '@/types'
 
 const App = () => {
@@ -48,7 +48,7 @@ const App = () => {
   if (!data) return <BaseLoading />
 
   const handleCreate = () => {
-    router.push({ pathname: `/add` })
+    router.push({ pathname: `/menu/create` })
   }
 
   return (

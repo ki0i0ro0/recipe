@@ -5,6 +5,7 @@ export const GET_RECIPE = gql`
     menus {
       id
       name
+      url
     }
     recipe(email: $email) {
       id

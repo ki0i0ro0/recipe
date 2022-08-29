@@ -7,6 +7,7 @@ export interface Recipe {
 export interface Menu {
   id: number
   name: string
+  url: string
 }
 
 export interface GetRecipe {

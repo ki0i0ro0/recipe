@@ -7,9 +7,9 @@ import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { BaseLoading } from '@/components/BaseLoading'
 import { BasePage } from '@/components/BasePage'
-import { ADD_USER_RECIPE } from '@/graphql/add-user-recipe'
-import { GET_MENU } from '@/graphql/get-menu'
-import { REMOVE_USER_RECIPE } from '@/graphql/remove-user-recipe'
+import { GET_MENU } from '@/graphql/menu/get'
+import { ADD_USER_RECIPE } from '@/graphql/recipe/add'
+import { REMOVE_USER_RECIPE } from '@/graphql/recipe/remove'
 import type { Menu } from '@/types'
 
 interface Data {

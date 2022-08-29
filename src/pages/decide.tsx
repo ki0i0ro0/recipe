@@ -7,8 +7,8 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { BaseLoading } from '@/components/BaseLoading'
 import { BasePage } from '@/components/BasePage'
-import { ADD_USER_RECIPE } from '@/graphql/add-user-recipe'
-import { GET_RECIPE } from '@/graphql/get-recipe'
+import { ADD_USER_RECIPE } from '@/graphql/recipe/add'
+import { GET_RECIPE } from '@/graphql/recipe/get'
 import type { AppMenu, GetRecipe, Menu } from '@/types'
 
 const App = () => {
@@ -26,7 +26,7 @@ const App = () => {
   const ShuffleMenu = (unCookedMenus: AppMenu[]) => {
     if (unCookedMenus.length < 1) return
     const todaysAppMenu = unCookedMenus[Math.floor(Math.random() * unCookedMenus.length)]
-    const todaysMenu: Menu = { id: todaysAppMenu.menuId, name: todaysAppMenu.menuName }
+    const todaysMenu: Menu = { id: todaysAppMenu.menuId, name: todaysAppMenu.menuName, url: '' }
     setMenu(todaysMenu)
   }
 

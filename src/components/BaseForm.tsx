@@ -40,6 +40,15 @@ export const BaseForm = (props: Props): JSX.Element => {
         onChange={formik.handleChange}
         required
       />
+      <TextField
+        fullWidth
+        margin="normal"
+        name="url"
+        label="レシピURL"
+        value={formik.values.url}
+        onChange={formik.handleChange}
+        required
+      />
       <Stack>
         <LoadingButton startIcon={buttonSetting.icon} loading={loading}>
           {buttonSetting.title}

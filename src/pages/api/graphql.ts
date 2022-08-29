@@ -14,6 +14,7 @@ const typeDefs = gql`
   type Menu {
     id: Int!
     name: String!
+    url: String!
   }
 
   type Query {
@@ -25,7 +26,8 @@ const typeDefs = gql`
   type Mutation {
     addUserRecipe(email: String!, menuId: Int!): Recipe
     removeUserRecipe(email: String!, recipeId: Int!): Recipe
-    createMenu(name: String!): Menu
+    createMenu(name: String!, url: String!): Menu
+    updateMenu(id: Int!, name: String!, url: String!): Menu
     resetUserRecipe(email: String!): [Recipe]
   }
 `
@@ -92,10 +94,22 @@ const resetUserRecipe = async (args: { email: string }) => {
  * @param args
  * @returns
  */
-const createMenu = (args: { name: string }) =>
+const createMenu = (args: { name: string; url?: string }) =>
   prisma.menu.create({
     data: {
       name: args.name,
+      url: args.url || '',
+    },
+  })
+
+const updateMenu = (args: { id: number; name: string; url: string }) =>
+  prisma.menu.update({
+    where: {
+      id: args.id,
+    },
+    data: {
+      name: args.name,
+      url: args.url,
     },
   })
 
@@ -109,6 +123,7 @@ const resolvers = {
     addUserRecipe: (_: undefined, args: any) => addUserRecipe(args),
     removeUserRecipe: (_: undefined, args: any) => removeUserRecipe(args),
     createMenu: (_: undefined, args: any) => createMenu(args),
+    updateMenu: (_: undefined, args: any) => updateMenu(args),
     resetUserRecipe: (_: undefined, args: any) => resetUserRecipe(args),
   },
 }
