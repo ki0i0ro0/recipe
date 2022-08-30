@@ -14,7 +14,7 @@ const typeDefs = gql`
   type Menu {
     id: Int!
     name: String!
-    url: String!
+    url: String
   }
 
   type Query {
