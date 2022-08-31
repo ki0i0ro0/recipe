@@ -13,6 +13,7 @@ import {
 } from '@mui/material'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
+import { BaseDrawer } from '@/components/BaseDrawer'
 import { BaseLoading } from '@/components/BaseLoading'
 import { GET_RECIPE } from '@/graphql/recipe/get'
 import type { AppMenu, GetRecipe } from '@/types'
@@ -47,27 +48,17 @@ const App = () => {
   if (error) return <p>エラーが発生しています</p>
   if (!data) return <BaseLoading />
 
-  const handleCreate = () => {
-    router.push({ pathname: `/menu/create` })
-  }
-
   return (
-    <>
+    <BaseDrawer>
       {/* Menu add Button */}
       <IconButton
         sx={{ position: 'absolute', bottom: 16, right: 16 }}
-        color="info"
-        onClick={handleCreate}
-      >
-        <AddCircle fontSize="large" />
-      </IconButton>
-      <IconButton
-        sx={{ position: 'absolute', bottom: 16, left: 16 }}
         color="info"
         href="./recipe/decide"
       >
         <AutoMode fontSize="large" />
       </IconButton>
+
       {/* Menu List */}
       <TableContainer>
         <Table>
@@ -93,7 +84,7 @@ const App = () => {
           </TableBody>
         </Table>
       </TableContainer>
-    </>
+    </BaseDrawer>
   )
 }
 
