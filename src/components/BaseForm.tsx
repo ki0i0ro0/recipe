@@ -50,7 +50,7 @@ export const BaseForm = (props: Props): JSX.Element => {
         required
       />
       <Stack>
-        <LoadingButton startIcon={buttonSetting.icon} loading={loading}>
+        <LoadingButton type="submit" startIcon={buttonSetting.icon} loading={loading}>
           {buttonSetting.title}
         </LoadingButton>
       </Stack>
