@@ -93,11 +93,10 @@ const addUserRecipe = async (args: { email: string; menuId: number }) => {
  */
 const removeUserRecipe = async (args: { recipeId: number }) => {
   const { recipeId } = args
-  return prisma.recipe.delete({
-    where: {
-      id: recipeId,
-    },
-  })
+  const recipeRef = db.collection('recipes').doc(recipeId.toString())
+  const res = (await recipeRef.get()).data()
+  await recipeRef.delete()
+  return res
 }
 
 /**
