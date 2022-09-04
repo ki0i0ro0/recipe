@@ -26,15 +26,3 @@ graph ql
 ## 参考
 
 https://reffect.co.jp/react/next-js-graphql
-
-### テーブル作成
-
-npx prisma db push
-
-###　 DB ツール
-
-npx prisma studio
-
-### DB モデル作成
-
-npx prisma generate
