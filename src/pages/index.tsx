@@ -31,11 +31,11 @@ const App = () => {
   useEffect(() => {
     if (data) {
       const cookedMenus: AppMenu[] = data?.menus.map((menu) => {
-        const cookedMenu = data?.recipe.find((userMenu) => +userMenu.menu_id === +menu.id)
+        const cookedMenu = data?.recipe.find((userMenu) => +userMenu.menuId === +menu.id)
         return {
           menuId: menu.id ?? 0,
           menuName: menu.name,
-          createdAt: cookedMenu?.created_at || '',
+          createdAt: cookedMenu?.createdAt || '',
           recipeId: cookedMenu?.id ?? 0,
         }
       })
@@ -76,7 +76,7 @@ const App = () => {
                     <a href={`/recipe/update/${row.menuId}/${row.recipeId}`}>{row.menuName}</a>
                   </TableCell>
                   <TableCell>
-                    {row.createdAt ? new Date(+row.createdAt).toLocaleDateString() : null}
+                    {row.createdAt ? new Date(row.createdAt).toLocaleDateString() : null}
                   </TableCell>
                 </TableRow>
               )

@@ -1,7 +1,14 @@
-import { PrismaClient } from '@prisma/client'
 import { ApolloServer, gql } from 'apollo-server-micro'
 import * as admin from 'firebase-admin'
 import type { NextApiRequest, NextApiResponse } from 'next'
+import type { Menu } from '@/types'
+
+interface UserRecipe {
+  id: number
+  menuId: number
+  userId: number
+  createdAt: String
+}
 
 if (admin.apps.length === 0) {
   admin.initializeApp({
@@ -16,13 +23,11 @@ if (admin.apps.length === 0) {
 
 const db = admin.firestore()
 
-const prisma = new PrismaClient()
-
 const typeDefs = gql`
   type Recipe {
     id: Int!
-    menu_id: Int!
-    created_at: String!
+    menuId: Int!
+    createdAt: String!
   }
 
   type Menu {
@@ -42,7 +47,6 @@ const typeDefs = gql`
     removeUserRecipe(email: String!, recipeId: Int!): Recipe
     createMenu(name: String!, url: String!): Menu
     updateMenu(id: Int!, name: String!, url: String!): Menu
-    resetUserRecipe(email: String!): [Recipe]
   }
 `
 
@@ -57,6 +61,12 @@ const getUserId = async (email: string) => {
   return doc.exists ? doc.data()?.id : 0
 }
 
+const getNewId = () => {
+  const idNum = +new Date()
+  const id = idNum.toString().slice(0, -3)
+  return id
+}
+
 /**
  * Get user recipe list by email address
  * @param args
@@ -64,11 +74,10 @@ const getUserId = async (email: string) => {
  */
 const getRecipe = async (args: { email: string }) => {
   const userId = await getUserId(args.email)
-  return prisma.recipe.findMany({
-    where: {
-      user_id: userId,
-    },
-  })
+  const userRecipes = await db.collection('recipes').where('userId', '==', userId).get()
+  const buff: UserRecipe[] = []
+  userRecipes.forEach((userRecipe) => buff.push(userRecipe.data() as UserRecipe))
+  return buff
 }
 
 /**
@@ -78,12 +87,16 @@ const getRecipe = async (args: { email: string }) => {
  */
 const addUserRecipe = async (args: { email: string; menuId: number }) => {
   const userId = await getUserId(args.email)
-  return prisma.recipe.create({
-    data: {
-      user_id: userId,
-      menu_id: args.menuId,
-    },
-  })
+  const id = getNewId()
+  const docRef = db.collection('recipes').doc(id) as admin.firestore.DocumentReference<UserRecipe>
+  const data = {
+    id: +id,
+    userId: userId,
+    menuId: args.menuId,
+    createdAt: new Date().toString(),
+  }
+  await docRef.set(data)
+  return data
 }
 
 /**
@@ -93,24 +106,12 @@ const addUserRecipe = async (args: { email: string; menuId: number }) => {
  */
 const removeUserRecipe = async (args: { recipeId: number }) => {
   const { recipeId } = args
-  const recipeRef = db.collection('recipes').doc(recipeId.toString())
-  const res = (await recipeRef.get()).data()
-  await recipeRef.delete()
+  const docRef = db
+    .collection('recipes')
+    .doc(recipeId.toString()) as admin.firestore.DocumentReference<UserRecipe>
+  const res = (await docRef.get()).data()
+  await docRef.delete()
   return res
-}
-
-/**
- * Delete user's all recipe
- * @param args
- * @returns
- */
-const resetUserRecipe = async (args: { email: string }) => {
-  const userId = await getUserId(args.email)
-  return prisma.recipe.deleteMany({
-    where: {
-      user_id: userId,
-    },
-  })
 }
 
 /**
@@ -120,9 +121,8 @@ const resetUserRecipe = async (args: { email: string }) => {
  */
 const createMenu = async (args: { name: string; url?: string }) => {
   const { name, url } = args
-  const idNum = +new Date()
-  const id = idNum.toString().slice(0, -3)
-  const docRef = db.collection('menus').doc(id)
+  const id = getNewId()
+  const docRef = db.collection('menus').doc(id) as admin.firestore.DocumentReference<Menu>
   const data = {
     id: +id,
     name,
@@ -139,7 +139,9 @@ const createMenu = async (args: { name: string; url?: string }) => {
  */
 const updateMenu = async (args: { id: number; name: string; url: string }) => {
   const { id, name, url } = args
-  const docRef = db.collection('menus').doc(id.toString())
+  const docRef = db
+    .collection('menus')
+    .doc(id.toString()) as admin.firestore.DocumentReference<Menu>
   const data = {
     id,
     name,
@@ -150,20 +152,33 @@ const updateMenu = async (args: { id: number; name: string; url: string }) => {
 }
 
 /**
+ * Get one menu
+ * @param args
+ * @returns
+ */
+const getMenu = async (args: { id: number }) => {
+  const docRef = (await db
+    .collection('menus')
+    .doc(args.id.toString())) as admin.firestore.DocumentReference<Menu>
+  const data = (await docRef.get()).data()
+  return data
+}
+
+/**
  * Get All Menu
  * @returns
  */
 const getMenus = async () => {
   const menus = await db.collection('menus').get()
-  const buff: { id: number; name: string; url: string }[] = []
-  menus.forEach((menu) => buff.push(menu.data() as { id: number; name: string; url: string }))
+  const buff: Menu[] = []
+  menus.forEach((menu) => buff.push(menu.data() as Menu))
   return buff
 }
 
 const resolvers = {
   Query: {
     recipe: (_: undefined, args: any) => getRecipe(args),
-    menu: (_: undefined, args: any) => prisma.menu.findFirst({ where: { id: args.id } }),
+    menu: (_: undefined, args: any) => getMenu(args),
     menus: () => getMenus(),
   },
   Mutation: {
@@ -171,16 +186,12 @@ const resolvers = {
     removeUserRecipe: (_: undefined, args: any) => removeUserRecipe(args),
     createMenu: (_: undefined, args: any) => createMenu(args),
     updateMenu: (_: undefined, args: any) => updateMenu(args),
-    resetUserRecipe: (_: undefined, args: any) => resetUserRecipe(args),
   },
 }
 
 const apolloServer = new ApolloServer({
   typeDefs,
   resolvers,
-  context: {
-    prisma,
-  },
 })
 
 const startServer = apolloServer.start()

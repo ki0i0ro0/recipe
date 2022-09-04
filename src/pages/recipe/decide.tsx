@@ -33,11 +33,11 @@ const App = () => {
   useEffect(() => {
     if (!data) return
     const cookedMenus: AppMenu[] = data?.menus.map((menu) => {
-      const cookedMenu = data?.recipe.find((userMenu) => userMenu.menu_id === menu.id)
+      const cookedMenu = data?.recipe.find((userMenu) => userMenu.menuId === menu.id)
       return {
         menuId: menu.id ?? 0,
         menuName: menu.name,
-        createdAt: cookedMenu?.created_at || '',
+        createdAt: cookedMenu?.createdAt || '',
         recipeId: cookedMenu?.id ?? 0,
       }
     })

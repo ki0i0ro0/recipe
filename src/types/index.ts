@@ -1,7 +1,7 @@
 export interface Recipe {
   id: number
-  menu_id: number
-  created_at: string
+  menuId: number
+  createdAt: string
 }
 
 export interface Menu {

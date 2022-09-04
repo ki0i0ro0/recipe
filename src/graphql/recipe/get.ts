@@ -9,8 +9,8 @@ export const GET_RECIPE = gql`
     }
     recipe(email: $email) {
       id
-      menu_id
-      created_at
+      menuId
+      createdAt
     }
   }
 `
