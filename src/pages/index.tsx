@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client'
 import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0'
-import { AutoMode } from '@mui/icons-material'
+import { AutoMode, MenuBook } from '@mui/icons-material'
 import {
   Box,
   IconButton,
@@ -29,6 +29,7 @@ const App = () => {
     variables: {
       email: user?.email,
     },
+    fetchPolicy: 'network-only',
   })
 
   useEffect(() => {
@@ -57,6 +58,12 @@ const App = () => {
     router.push('/recipe/update')
   }
 
+  const handleRecipeURL = (url?: string) => {
+    if (url && url.length > 5) {
+      window.open(url)
+    }
+  }
+
   return (
     <BaseDrawer>
       {/* Menu add Button */}
@@ -77,6 +84,7 @@ const App = () => {
             <TableRow>
               <TableCell>料理名</TableCell>
               <TableCell>作成日</TableCell>
+              <TableCell></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -86,6 +94,9 @@ const App = () => {
                   <TableCell onClick={() => handleUpdate(row)}>{row.menuName}</TableCell>
                   <TableCell>
                     {row.createdAt ? new Date(row.createdAt).toLocaleDateString() : null}
+                  </TableCell>
+                  <TableCell onClick={() => handleRecipeURL(row.url)}>
+                    {row.url && row.url.length > 5 ? <MenuBook /> : null}
                   </TableCell>
                 </TableRow>
               )

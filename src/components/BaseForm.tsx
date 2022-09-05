@@ -1,7 +1,8 @@
 import { Add, Edit } from '@mui/icons-material'
 import { LoadingButton } from '@mui/lab'
-import { Stack, TextField } from '@mui/material'
+import { Button, Stack, TextField } from '@mui/material'
 import { useFormik } from 'formik'
+import { useRouter } from 'next/router'
 import { Dispatch, SetStateAction, useState } from 'react'
 import * as Yup from 'yup'
 import { Menu } from '@/types'
@@ -17,6 +18,7 @@ interface Props {
 }
 
 export const BaseForm = (props: Props): JSX.Element => {
+  const router = useRouter()
   const { initialValues, onSubmit, type = 'create' } = props
   const [loading, setLoading] = useState(false)
   const formik = useFormik({
@@ -26,8 +28,8 @@ export const BaseForm = (props: Props): JSX.Element => {
       onSubmit(values, setLoading)
     },
   })
-  const buttonSetting =
-    type === 'create' ? { icon: <Add />, title: '登録する' } : { icon: <Edit />, title: '更新する' }
+
+  const icon = type === 'create' ? <Add /> : <Edit />
 
   return (
     <form onSubmit={formik.handleSubmit}>
@@ -47,12 +49,19 @@ export const BaseForm = (props: Props): JSX.Element => {
         label="レシピURL"
         value={formik.values.url}
         onChange={formik.handleChange}
-        required
       />
       <Stack>
-        <LoadingButton type="submit" startIcon={buttonSetting.icon} loading={loading}>
-          {buttonSetting.title}
+        <LoadingButton type="submit" startIcon={icon} loading={loading}>
+          OK
         </LoadingButton>
+        <Button
+          type="reset"
+          onClick={() => {
+            router.push('/')
+          }}
+        >
+          Cancel
+        </Button>
       </Stack>
     </form>
   )
