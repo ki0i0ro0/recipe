@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client'
 import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0'
-import { AddCircle, AutoMode } from '@mui/icons-material'
+import { AutoMode } from '@mui/icons-material'
 import {
   Box,
   IconButton,
@@ -13,14 +13,17 @@ import {
 } from '@mui/material'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
+import { useSetRecoilState } from 'recoil'
 import { BaseDrawer } from '@/components/BaseDrawer'
 import { BaseLoading } from '@/components/BaseLoading'
 import { GET_RECIPE } from '@/graphql/recipe/get'
+import { userMenuState } from '@/stores/userMenu'
 import type { AppMenu, GetRecipe } from '@/types'
 
 const App = () => {
   const { user } = useUser()
   const router = useRouter()
+  const setUserMenu = useSetRecoilState(userMenuState)
   const [rows, setRows] = useState<AppMenu[]>([])
   const { data, loading, error } = useQuery<GetRecipe>(GET_RECIPE, {
     variables: {
@@ -33,8 +36,9 @@ const App = () => {
       const cookedMenus: AppMenu[] = data?.menus.map((menu) => {
         const cookedMenu = data?.recipe.find((userMenu) => +userMenu.menuId === +menu.id)
         return {
-          menuId: menu.id ?? 0,
+          menuId: menu.id,
           menuName: menu.name,
+          url: menu.url,
           createdAt: cookedMenu?.createdAt || '',
           recipeId: cookedMenu?.id ?? 0,
         }
@@ -48,13 +52,20 @@ const App = () => {
   if (error) return <p>エラーが発生しています</p>
   if (!data) return <BaseLoading />
 
+  const handleUpdate = (row: AppMenu) => {
+    setUserMenu(row)
+    router.push('/recipe/update')
+  }
+
   return (
     <BaseDrawer>
       {/* Menu add Button */}
       <IconButton
         sx={{ position: 'absolute', bottom: 16, right: 16 }}
         color="info"
-        href="./recipe/decide"
+        onClick={() => {
+          router.push('/recipe/decide')
+        }}
       >
         <AutoMode fontSize="large" />
       </IconButton>
@@ -72,9 +83,7 @@ const App = () => {
             {rows.map((row) => {
               return (
                 <TableRow onClick={(event) => console.log(event)} key={row.menuId}>
-                  <TableCell>
-                    <a href={`/recipe/update/${row.menuId}/${row.recipeId}`}>{row.menuName}</a>
-                  </TableCell>
+                  <TableCell onClick={() => handleUpdate(row)}>{row.menuName}</TableCell>
                   <TableCell>
                     {row.createdAt ? new Date(row.createdAt).toLocaleDateString() : null}
                   </TableCell>

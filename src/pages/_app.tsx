@@ -2,6 +2,7 @@ import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client'
 import { UserProvider } from '@auth0/nextjs-auth0'
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
+import { RecoilRoot } from 'recoil'
 import '../styles/globals.css'
 
 const client = new ApolloClient({
@@ -15,11 +16,13 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Head>
         <title>Recipe App</title>
       </Head>
-      <UserProvider>
-        <ApolloProvider client={client}>
-          <Component {...pageProps} />
-        </ApolloProvider>
-      </UserProvider>
+      <RecoilRoot>
+        <UserProvider>
+          <ApolloProvider client={client}>
+            <Component {...pageProps} />
+          </ApolloProvider>
+        </UserProvider>
+      </RecoilRoot>
     </>
   )
 }

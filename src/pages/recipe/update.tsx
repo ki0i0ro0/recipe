@@ -5,27 +5,20 @@ import { LoadingButton } from '@mui/lab'
 import { Avatar, Box, Button, Typography } from '@mui/material'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
+import { useRecoilValue } from 'recoil'
 import { BaseLoading } from '@/components/BaseLoading'
 import { BasePage } from '@/components/BasePage'
-import { GET_MENU } from '@/graphql/menu/get'
 import { ADD_USER_RECIPE } from '@/graphql/recipe/add'
 import { REMOVE_USER_RECIPE } from '@/graphql/recipe/remove'
-import type { Menu } from '@/types'
-
-interface Data {
-  menu: Menu
-}
+import { userMenuState } from '@/stores/userMenu'
 
 const App = () => {
   const { user } = useUser()
   const router = useRouter()
+  const userMenu = useRecoilValue(userMenuState)
   const [addUserRecipe] = useMutation(ADD_USER_RECIPE)
   const [removeUserRecipe] = useMutation(REMOVE_USER_RECIPE)
   const [processing, setProcessing] = useState(false)
-
-  const { menuId, recipeId } = router.query
-
-  const { loading, error, data } = useQuery<Data>(GET_MENU, { variables: { id: Number(menuId) } })
 
   // レシピ作成
   const handleAddUserRecipe = async (menuId: number) => {
@@ -37,7 +30,7 @@ const App = () => {
       },
     })
     setProcessing(false)
-    router.push({ pathname: '/' })
+    router.push('/')
   }
 
   // レシピ削除
@@ -50,14 +43,10 @@ const App = () => {
       },
     })
     setProcessing(false)
-    router.push({ pathname: '/' })
+    router.push('/')
   }
 
-  if (loading) return <BaseLoading />
-  if (error) return <p>Error</p>
-  if (!data) return <BaseLoading />
-
-  const isCreateMode = recipeId === '0'
+  const isCreateMode = userMenu.createdAt == ''
 
   return (
     <BasePage>
@@ -67,7 +56,7 @@ const App = () => {
       <Typography color="text.secondary">履歴編集</Typography>
       <Box>
         <Typography variant="h5" component="div" mt={2} gutterBottom>
-          {data.menu.name}
+          {userMenu.menuName}
         </Typography>
         <Typography color="text.secondary" gutterBottom>
           {isCreateMode ? 'を作りましたか？' : 'を取り消しますか？'}
@@ -75,17 +64,30 @@ const App = () => {
         <LoadingButton
           onClick={() => {
             if (isCreateMode) {
-              handleAddUserRecipe(data.menu.id)
+              handleAddUserRecipe(userMenu.menuId)
             } else {
-              handleRemoveUserRecipe(typeof recipeId === 'string' ? +recipeId : 0)
+              handleRemoveUserRecipe(userMenu.recipeId)
             }
           }}
           loading={processing}
         >
           OK
         </LoadingButton>
-        <Button disabled={processing} href="/">
+        <Button
+          disabled={processing}
+          onClick={() => {
+            router.push('/')
+          }}
+        >
           Cancel
+        </Button>
+        <Button
+          disabled={processing}
+          onClick={() => {
+            router.push('/menu/update')
+          }}
+        >
+          Edit
         </Button>
       </Box>
     </BasePage>

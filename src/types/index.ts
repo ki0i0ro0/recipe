@@ -20,6 +20,7 @@ export interface AppMenu {
   menuName: string
   createdAt: string
   recipeId: number
+  url?: string
 }
 
 export type Order = 'asc' | 'desc'

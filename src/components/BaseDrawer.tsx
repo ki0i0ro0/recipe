@@ -1,9 +1,7 @@
 import { DinnerDining, RestaurantMenu } from '@mui/icons-material'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'
-import MailIcon from '@mui/icons-material/Mail'
 import MenuIcon from '@mui/icons-material/Menu'
-import InboxIcon from '@mui/icons-material/MoveToInbox'
 // eslint-disable-next-line import/named
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar'
 import Box from '@mui/material/Box'
@@ -19,6 +17,7 @@ import ListItemText from '@mui/material/ListItemText'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
 import { styled, useTheme } from '@mui/material/styles'
+import { useRouter } from 'next/router'
 import * as React from 'react'
 
 const drawerWidth = 240
@@ -73,6 +72,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 }))
 
 export const BaseDrawer = ({ children }: { children: React.ReactNode }) => {
+  const router = useRouter()
   const theme = useTheme()
   const [open, setOpen] = React.useState(false)
 
@@ -124,19 +124,15 @@ export const BaseDrawer = ({ children }: { children: React.ReactNode }) => {
         <Divider />
         <List>
           <ListItem key={'Add Menu'} disablePadding>
-            <ListItemButton href="/menu/create">
+            <ListItemButton
+              onClick={() => {
+                router.push('/menu/create')
+              }}
+            >
               <ListItemIcon>
                 <DinnerDining />
               </ListItemIcon>
               <ListItemText primary={'Add Menu'} />
-            </ListItemButton>
-          </ListItem>
-          <ListItem key={'Edit Menu'} disablePadding>
-            <ListItemButton href="/menu/update/1">
-              <ListItemIcon>
-                <RestaurantMenu />
-              </ListItemIcon>
-              <ListItemText primary={'Edit Menu'} />
             </ListItemButton>
           </ListItem>
         </List>

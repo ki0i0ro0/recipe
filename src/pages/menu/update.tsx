@@ -4,21 +4,17 @@ import { Add } from '@mui/icons-material'
 import { Avatar, Box, Typography } from '@mui/material'
 import { useRouter } from 'next/router'
 import type { Dispatch, SetStateAction } from 'react'
+import { useRecoilValue } from 'recoil'
 import { BaseForm } from '@/components/BaseForm'
 import { BaseLoading } from '@/components/BaseLoading'
 import { BasePage } from '@/components/BasePage'
-import { type DataMenu, GET_MENU } from '@/graphql/menu/get'
 import { UPDATE_MENU } from '@/graphql/menu/update'
+import { userMenuState } from '@/stores/userMenu'
 import type { Menu } from '@/types'
 
 const App = () => {
   const router = useRouter()
-  const { menuId } = router.query
-
-  const { loading, error, data } = useQuery<DataMenu>(GET_MENU, {
-    variables: { id: Number(menuId) },
-  })
-
+  const userMenu = useRecoilValue(userMenuState)
   const [updateMenuHook] = useMutation(UPDATE_MENU)
 
   const updateMenu = async (value: Menu, setLoading: Dispatch<SetStateAction<boolean>>) => {
@@ -30,9 +26,11 @@ const App = () => {
     router.push({ pathname: '/' })
   }
 
-  if (loading) return <BaseLoading />
-  if (error) return <p>Error</p>
-  if (!data) return <BaseLoading />
+  const menu: Menu = {
+    id: userMenu.menuId,
+    name: userMenu.menuName,
+    url: userMenu.url || '',
+  }
 
   return (
     <BasePage>
@@ -40,7 +38,7 @@ const App = () => {
         <Add />
       </Avatar>
       <Typography textAlign="center">メニューを編集</Typography>
-      <BaseForm initialValues={{ ...data.menu }} onSubmit={updateMenu} type="update" />
+      <BaseForm initialValues={{ ...menu }} onSubmit={updateMenu} type="update" />
     </BasePage>
   )
 }

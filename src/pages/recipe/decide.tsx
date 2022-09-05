@@ -83,7 +83,13 @@ const App = () => {
         >
           OK
         </LoadingButton>
-        <Button href="/">Cancel</Button>
+        <Button
+          onClick={() => {
+            router.push('/')
+          }}
+        >
+          Cancel
+        </Button>
         <Button onClick={() => ShuffleMenu(unCookedMenus)}>Retry</Button>
       </Box>
     </BasePage>
