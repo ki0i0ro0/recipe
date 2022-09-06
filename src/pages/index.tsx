@@ -13,7 +13,6 @@ import {
 } from '@mui/material'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import { useSetRecoilState } from 'recoil'
 import { BaseDrawer } from '@/components/BaseDrawer'
 import { BaseLoading } from '@/components/BaseLoading'
 import { GET_RECIPE } from '@/graphql/recipe/get'
@@ -23,7 +22,6 @@ import type { AppMenu, GetRecipe } from '@/types'
 const App = () => {
   const { user } = useUser()
   const router = useRouter()
-  const setUserMenu = useSetRecoilState(userMenuState)
   const [rows, setRows] = useState<AppMenu[]>([])
   const { data, loading, error } = useQuery<GetRecipe>(GET_RECIPE, {
     variables: {
@@ -54,7 +52,7 @@ const App = () => {
   if (!data) return <BaseLoading />
 
   const handleUpdate = (row: AppMenu) => {
-    setUserMenu(row)
+    userMenuState(row)
     router.push('/recipe/update')
   }
 

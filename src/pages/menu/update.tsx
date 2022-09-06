@@ -4,7 +4,6 @@ import { Add } from '@mui/icons-material'
 import { Avatar, Box, Typography } from '@mui/material'
 import { useRouter } from 'next/router'
 import type { Dispatch, SetStateAction } from 'react'
-import { useRecoilValue } from 'recoil'
 import { BaseForm } from '@/components/BaseForm'
 import { BaseLoading } from '@/components/BaseLoading'
 import { BasePage } from '@/components/BasePage'
@@ -14,7 +13,7 @@ import type { Menu } from '@/types'
 
 const App = () => {
   const router = useRouter()
-  const userMenu = useRecoilValue(userMenuState)
+  const userMenu = userMenuState()
   const [updateMenuHook] = useMutation(UPDATE_MENU)
 
   const updateMenu = async (value: Menu, setLoading: Dispatch<SetStateAction<boolean>>) => {

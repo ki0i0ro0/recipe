@@ -1,12 +1,9 @@
-import { atom } from 'recoil'
+import { makeVar } from '@apollo/client'
 import type { AppMenu } from '@/types'
-
-export const userMenuState = atom({
-  key: 'userMenu',
-  default: {
-    menuId: 0,
-    menuName: '',
-    createdAt: '',
-    recipeId: 0,
-  } as AppMenu,
-})
+// 現在のログイン情報を保持するリアクティブ変数。引数に初期値(false)を指定します。
+export const userMenuState = makeVar({
+  menuId: 0,
+  menuName: '',
+  createdAt: '',
+  recipeId: 0,
+} as AppMenu)

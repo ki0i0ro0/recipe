@@ -5,7 +5,6 @@ import { LoadingButton } from '@mui/lab'
 import { Avatar, Box, Button, Typography } from '@mui/material'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
-import { useRecoilValue } from 'recoil'
 import { BaseLoading } from '@/components/BaseLoading'
 import { BasePage } from '@/components/BasePage'
 import { ADD_USER_RECIPE } from '@/graphql/recipe/add'
@@ -15,7 +14,7 @@ import { userMenuState } from '@/stores/userMenu'
 const App = () => {
   const { user } = useUser()
   const router = useRouter()
-  const userMenu = useRecoilValue(userMenuState)
+  const userMenu = userMenuState()
   const [addUserRecipe] = useMutation(ADD_USER_RECIPE)
   const [removeUserRecipe] = useMutation(REMOVE_USER_RECIPE)
   const [processing, setProcessing] = useState(false)
