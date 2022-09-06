@@ -66,7 +66,7 @@ const App = () => {
     <BaseDrawer>
       {/* Menu add Button */}
       <IconButton
-        sx={{ position: 'absolute', bottom: 16, right: 16 }}
+        sx={{ position: 'fixed', bottom: 16, right: 16 }}
         color="info"
         onClick={() => {
           router.push('/recipe/decide')
