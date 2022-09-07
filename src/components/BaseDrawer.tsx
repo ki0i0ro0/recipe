@@ -3,6 +3,7 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 import MenuIcon from '@mui/icons-material/Menu'
 // eslint-disable-next-line import/named
+import { Button } from '@mui/material'
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar'
 import Box from '@mui/material/Box'
 import CssBaseline from '@mui/material/CssBaseline'
@@ -98,9 +99,17 @@ export const BaseDrawer = ({ children }: { children: React.ReactNode }) => {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
+          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
             Recipe App
           </Typography>
+          <Button
+            color="inherit"
+            onClick={() => {
+              router.push('/api/auth/logout')
+            }}
+          >
+            Logout
+          </Button>
         </Toolbar>
       </AppBar>
       <Drawer
