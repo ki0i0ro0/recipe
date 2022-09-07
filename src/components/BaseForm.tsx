@@ -9,17 +9,19 @@ import { Menu } from '@/types'
 
 const FORM_SCHEMA = Yup.object({
   name: Yup.string().required(),
+  url: Yup.string(),
 })
 
 interface Props {
   initialValues: Menu
   onSubmit: (values: Menu, setLoading: Dispatch<SetStateAction<boolean>>) => void
+  onDelete?: (values: Menu, setLoading: Dispatch<SetStateAction<boolean>>) => void
   type: string
 }
 
 export const BaseForm = (props: Props): JSX.Element => {
   const router = useRouter()
-  const { initialValues, onSubmit, type = 'create' } = props
+  const { initialValues, onSubmit, type = 'create', onDelete } = props
   const [loading, setLoading] = useState(false)
   const formik = useFormik({
     initialValues: initialValues,
@@ -28,6 +30,12 @@ export const BaseForm = (props: Props): JSX.Element => {
       onSubmit(values, setLoading)
     },
   })
+
+  const handleDelete = () => {
+    if (onDelete) {
+      onDelete(initialValues, setLoading)
+    }
+  }
 
   const icon = type === 'create' ? <Add /> : <Edit />
 
@@ -62,6 +70,13 @@ export const BaseForm = (props: Props): JSX.Element => {
         >
           Cancel
         </Button>
+        {type === 'update' && (
+          <>
+            <Button type="button" onClick={handleDelete}>
+              Delete
+            </Button>
+          </>
+        )}
       </Stack>
     </form>
   )

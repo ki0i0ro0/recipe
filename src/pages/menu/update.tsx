@@ -7,6 +7,7 @@ import type { Dispatch, SetStateAction } from 'react'
 import { BaseForm } from '@/components/BaseForm'
 import { BaseLoading } from '@/components/BaseLoading'
 import { BasePage } from '@/components/BasePage'
+import { DELETE_MENU } from '@/graphql/menu/delete'
 import { UPDATE_MENU } from '@/graphql/menu/update'
 import { userMenuState } from '@/stores/userMenu'
 import type { Menu } from '@/types'
@@ -15,11 +16,21 @@ const App = () => {
   const router = useRouter()
   const userMenu = userMenuState()
   const [updateMenuHook] = useMutation(UPDATE_MENU)
+  const [deleteMenuHook] = useMutation(DELETE_MENU)
 
   const updateMenu = async (value: Menu, setLoading: Dispatch<SetStateAction<boolean>>) => {
     setLoading(true)
     await updateMenuHook({
       variables: { ...value },
+    })
+    setLoading(false)
+    router.push({ pathname: '/' })
+  }
+
+  const deleteMenu = async (value: Menu, setLoading: Dispatch<SetStateAction<boolean>>) => {
+    setLoading(true)
+    await deleteMenuHook({
+      variables: { id: value.id },
     })
     setLoading(false)
     router.push({ pathname: '/' })
@@ -37,7 +48,12 @@ const App = () => {
         <Add />
       </Avatar>
       <Typography textAlign="center">メニューを編集</Typography>
-      <BaseForm initialValues={{ ...menu }} onSubmit={updateMenu} type="update" />
+      <BaseForm
+        initialValues={{ ...menu }}
+        onSubmit={updateMenu}
+        type="update"
+        onDelete={deleteMenu}
+      />
     </BasePage>
   )
 }

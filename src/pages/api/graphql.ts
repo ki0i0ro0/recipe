@@ -47,6 +47,7 @@ const typeDefs = gql`
     removeUserRecipe(email: String!, recipeId: Int!): Recipe
     createMenu(name: String!, url: String): Menu
     updateMenu(id: Int!, name: String!, url: String): Menu
+    deleteMenu(id: Int!): Menu
   }
 `
 
@@ -152,6 +153,21 @@ const updateMenu = async (args: { id: number; name: string; url: string }) => {
 }
 
 /**
+ * Delete one menu
+ * @param args
+ * @returns
+ */
+const deleteMenu = async (args: { id: number }) => {
+  const { id } = args
+  const docRef = db
+    .collection('menus')
+    .doc(id.toString()) as admin.firestore.DocumentReference<Menu>
+  const res = (await docRef.get()).data()
+  await docRef.delete()
+  return res
+}
+
+/**
  * Get one menu
  * @param args
  * @returns
@@ -186,6 +202,7 @@ const resolvers = {
     removeUserRecipe: (_: undefined, args: any) => removeUserRecipe(args),
     createMenu: (_: undefined, args: any) => createMenu(args),
     updateMenu: (_: undefined, args: any) => updateMenu(args),
+    deleteMenu: (_: undefined, args: any) => deleteMenu(args),
   },
 }
 
