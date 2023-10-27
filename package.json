@@ -37,10 +37,5 @@
     "eslint-config-next": "14.0.0",
     "prettier": "^3.0.3",
     "typescript": "5.2.2"
-  },
-  "prettier": {
-    "printWidth": 100,
-    "semi": false,
-    "singleQuote": true
   }
 }
