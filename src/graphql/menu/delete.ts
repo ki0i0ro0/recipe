@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client'
+import { gql } from "@apollo/client";
 
 export const DELETE_MENU = gql`
   mutation Mutation($id: Int!) {
@@ -6,4 +6,4 @@ export const DELETE_MENU = gql`
       id
     }
   }
-`
+`;

@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client'
+import { gql } from "@apollo/client";
 
 export const REMOVE_USER_RECIPE = gql`
   mutation RemoveUserRecipe($email: String!, $recipeId: Int!) {
@@ -6,4 +6,4 @@ export const REMOVE_USER_RECIPE = gql`
       id
     }
   }
-`
+`;

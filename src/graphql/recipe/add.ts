@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client'
+import { gql } from "@apollo/client";
 
 export const ADD_USER_RECIPE = gql`
   mutation AddUserRecipe($email: String!, $menuId: Int!) {
@@ -7,4 +7,4 @@ export const ADD_USER_RECIPE = gql`
       menuId
     }
   }
-`
+`;

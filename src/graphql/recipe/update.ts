@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client'
+import { gql } from "@apollo/client";
 
 export const UPDATE_RECIPE = gql`
   mutation Mutation($id: Int!, $data: String) {
@@ -6,4 +6,4 @@ export const UPDATE_RECIPE = gql`
       id
     }
   }
-`
+`;

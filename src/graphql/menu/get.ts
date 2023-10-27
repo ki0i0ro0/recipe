@@ -1,9 +1,9 @@
-import { gql } from '@apollo/client'
+import { gql } from "@apollo/client";
 
-import type { Menu } from '@/types'
+import type { Menu } from "@/types";
 
 export interface DataMenu {
-  menu: Menu
+  menu: Menu;
 }
 
 export const GET_MENU = gql`
@@ -14,4 +14,4 @@ export const GET_MENU = gql`
       url
     }
   }
-`
+`;

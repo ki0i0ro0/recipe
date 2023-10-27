@@ -1,15 +1,15 @@
-import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client'
-import type { AppProps } from 'next/app'
-import Head from 'next/head'
-import { SessionProvider } from "next-auth/react"
-import '../styles/globals.css'
+import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
+import type { AppProps } from "next/app";
+import Head from "next/head";
+import { SessionProvider } from "next-auth/react";
+import "../styles/globals.css";
 
 const client = new ApolloClient({
-  uri: '/api/graphql',
+  uri: "/api/graphql",
   cache: new InMemoryCache(),
-})
+});
 
-function MyApp({ Component, pageProps:{ session, ...pageProps } }: AppProps) {
+function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   return (
     <>
       <Head>
@@ -21,7 +21,7 @@ function MyApp({ Component, pageProps:{ session, ...pageProps } }: AppProps) {
         </ApolloProvider>
       </SessionProvider>
     </>
-  )
+  );
 }
 
-export default MyApp
+export default MyApp;

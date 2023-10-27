@@ -1,55 +1,62 @@
-import { useMutation, useQuery } from '@apollo/client'
-import { AutoMode } from '@mui/icons-material'
-import { LoadingButton } from '@mui/lab'
-import { Avatar, Box, Button, Typography } from '@mui/material'
-import { useRouter } from 'next/router'
-import { useSession } from "next-auth/react"
-import { useEffect, useState } from 'react'
-import { BaseLoading } from '@/components/BaseLoading'
-import { BasePage } from '@/components/BasePage'
-import { ADD_USER_RECIPE } from '@/graphql/recipe/add'
-import { GET_RECIPE } from '@/graphql/recipe/get'
-import type { AppMenu, GetRecipe, Menu } from '@/types'
+import { useMutation, useQuery } from "@apollo/client";
+import { AutoMode } from "@mui/icons-material";
+import { LoadingButton } from "@mui/lab";
+import { Avatar, Box, Button, Typography } from "@mui/material";
+import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
+import { BaseLoading } from "@/components/BaseLoading";
+import { BasePage } from "@/components/BasePage";
+import { ADD_USER_RECIPE } from "@/graphql/recipe/add";
+import { GET_RECIPE } from "@/graphql/recipe/get";
+import type { AppMenu, GetRecipe, Menu } from "@/types";
 
 const App = () => {
-  const router = useRouter()
-  const { data:session } = useSession()
-  const [addUserRecipe] = useMutation(ADD_USER_RECIPE)
-  const [menu, setMenu] = useState<Menu>()
-  const [unCookedMenus, setUnCookedMenus] = useState<AppMenu[]>([])
+  const router = useRouter();
+  const { data: session } = useSession();
+  const [addUserRecipe] = useMutation(ADD_USER_RECIPE);
+  const [menu, setMenu] = useState<Menu>();
+  const [unCookedMenus, setUnCookedMenus] = useState<AppMenu[]>([]);
   const { data, loading, error } = useQuery<GetRecipe>(GET_RECIPE, {
     variables: {
       email: session?.user?.email,
     },
-  })
+  });
 
   const ShuffleMenu = (unCookedMenus: AppMenu[]) => {
-    if (unCookedMenus.length < 1) return
-    const todaysAppMenu = unCookedMenus[Math.floor(Math.random() * unCookedMenus.length)]
-    const todaysMenu: Menu = { id: todaysAppMenu.menuId, name: todaysAppMenu.menuName, url: '' }
-    setMenu(todaysMenu)
-  }
+    if (unCookedMenus.length < 1) return;
+    const todaysAppMenu =
+      unCookedMenus[Math.floor(Math.random() * unCookedMenus.length)];
+    const todaysMenu: Menu = {
+      id: todaysAppMenu.menuId,
+      name: todaysAppMenu.menuName,
+      url: "",
+    };
+    setMenu(todaysMenu);
+  };
 
   useEffect(() => {
-    if (!data) return
+    if (!data) return;
     const cookedMenus: AppMenu[] = data?.menus.map((menu) => {
-      const cookedMenu = data?.recipe.find((userMenu) => userMenu.menuId === menu.id)
+      const cookedMenu = data?.recipe.find(
+        (userMenu) => userMenu.menuId === menu.id,
+      );
       return {
         menuId: menu.id ?? 0,
         menuName: menu.name,
-        createdAt: cookedMenu?.createdAt || '',
+        createdAt: cookedMenu?.createdAt || "",
         recipeId: cookedMenu?.id ?? 0,
-      }
-    })
+      };
+    });
 
-    const unCookedMenus = cookedMenus.filter((v) => !v.createdAt)
-    setUnCookedMenus(unCookedMenus)
-    ShuffleMenu(unCookedMenus)
-  }, [data])
+    const unCookedMenus = cookedMenus.filter((v) => !v.createdAt);
+    setUnCookedMenus(unCookedMenus);
+    ShuffleMenu(unCookedMenus);
+  }, [data]);
 
-  if (loading) return <BaseLoading />
-  if (error) return <p>エラーが発生しています</p>
-  if (!data) return <BaseLoading />
+  if (loading) return <BaseLoading />;
+  if (error) return <p>エラーが発生しています</p>;
+  if (!data) return <BaseLoading />;
 
   const handleUpdate = async (id: number) => {
     await addUserRecipe({
@@ -57,13 +64,13 @@ const App = () => {
         email: session?.user?.email,
         menuId: id,
       },
-    })
-    router.push({ pathname: `/` })
-  }
+    });
+    router.push({ pathname: `/` });
+  };
 
   return (
     <BasePage>
-      <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+      <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
         <AutoMode />
       </Avatar>
       <Box>
@@ -78,14 +85,14 @@ const App = () => {
         </Typography>
         <LoadingButton
           onClick={() => {
-            handleUpdate(menu?.id ? +menu?.id : 0)
+            handleUpdate(menu?.id ? +menu?.id : 0);
           }}
         >
           OK
         </LoadingButton>
         <Button
           onClick={() => {
-            router.push('/')
+            router.push("/");
           }}
         >
           Cancel
@@ -93,7 +100,7 @@ const App = () => {
         <Button onClick={() => ShuffleMenu(unCookedMenus)}>Retry</Button>
       </Box>
     </BasePage>
-  )
-}
+  );
+};
 
-export default App
+export default App;

@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client'
+import { gql } from "@apollo/client";
 
 export const CREATE_MENU = gql`
   mutation Mutation($name: String!, $url: String) {
@@ -6,4 +6,4 @@ export const CREATE_MENU = gql`
       id
     }
   }
-`
+`;

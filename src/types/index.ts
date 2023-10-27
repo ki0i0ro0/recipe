@@ -1,26 +1,26 @@
 export interface Recipe {
-  id: number
-  menuId: number
-  createdAt: string
+  id: number;
+  menuId: number;
+  createdAt: string;
 }
 
 export interface Menu {
-  id: number
-  name: string
-  url: string
+  id: number;
+  name: string;
+  url: string;
 }
 
 export interface GetRecipe {
-  menus: Menu[]
-  recipe: Recipe[]
+  menus: Menu[];
+  recipe: Recipe[];
 }
 
 export interface AppMenu {
-  menuId: number
-  menuName: string
-  createdAt: string
-  recipeId: number
-  url?: string
+  menuId: number;
+  menuName: string;
+  createdAt: string;
+  recipeId: number;
+  url?: string;
 }
 
-export type Order = 'asc' | 'desc'
+export type Order = "asc" | "desc";
