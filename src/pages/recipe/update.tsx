@@ -1,9 +1,9 @@
-import { useMutation, useQuery } from '@apollo/client'
-import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0'
+import { useMutation } from '@apollo/client'
 import { Add, Delete } from '@mui/icons-material'
 import { LoadingButton } from '@mui/lab'
 import { Avatar, Box, Button, Typography } from '@mui/material'
 import { useRouter } from 'next/router'
+import { useSession } from "next-auth/react"
 import { useState } from 'react'
 import { BaseLoading } from '@/components/BaseLoading'
 import { BasePage } from '@/components/BasePage'
@@ -12,7 +12,7 @@ import { REMOVE_USER_RECIPE } from '@/graphql/recipe/remove'
 import { userMenuState } from '@/stores/userMenu'
 
 const App = () => {
-  const { user } = useUser()
+  const { data:session } = useSession()
   const router = useRouter()
   const userMenu = userMenuState()
   const [addUserRecipe] = useMutation(ADD_USER_RECIPE)
@@ -24,7 +24,7 @@ const App = () => {
     setProcessing(true)
     await addUserRecipe({
       variables: {
-        email: user?.email,
+        email: session?.user?.email,
         menuId: menuId,
       },
     })
@@ -37,7 +37,7 @@ const App = () => {
     setProcessing(true)
     await removeUserRecipe({
       variables: {
-        email: user?.email,
+        email: session?.user?.email,
         recipeId: recipeId,
       },
     })
@@ -93,7 +93,4 @@ const App = () => {
   )
 }
 
-export default withPageAuthRequired(App, {
-  onRedirecting: () => <BaseLoading />,
-  onError: (error) => <Box>{error.message}</Box>,
-})
+export default App

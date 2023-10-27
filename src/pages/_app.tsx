@@ -1,7 +1,7 @@
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client'
-import { UserProvider } from '@auth0/nextjs-auth0'
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
+import { SessionProvider } from "next-auth/react"
 import '../styles/globals.css'
 
 const client = new ApolloClient({
@@ -9,17 +9,17 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 })
 
-function MyApp({ Component, pageProps }: AppProps) {
+function MyApp({ Component, pageProps:{ session, ...pageProps } }: AppProps) {
   return (
     <>
       <Head>
         <title>Recipe App</title>
       </Head>
-      <UserProvider>
+      <SessionProvider session={session}>
         <ApolloProvider client={client}>
           <Component {...pageProps} />
         </ApolloProvider>
-      </UserProvider>
+      </SessionProvider>
     </>
   )
 }

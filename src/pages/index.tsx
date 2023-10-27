@@ -1,8 +1,6 @@
 import { useQuery } from '@apollo/client'
-import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0'
 import { AutoMode, MenuBook } from '@mui/icons-material'
 import {
-  Box,
   IconButton,
   Table,
   TableBody,
@@ -12,6 +10,7 @@ import {
   TableRow,
 } from '@mui/material'
 import { useRouter } from 'next/router'
+import { useSession,  } from "next-auth/react"
 import { useEffect, useState } from 'react'
 import { BaseDrawer } from '@/components/BaseDrawer'
 import { BaseLoading } from '@/components/BaseLoading'
@@ -20,12 +19,12 @@ import { userMenuState } from '@/stores/userMenu'
 import type { AppMenu, GetRecipe } from '@/types'
 
 const App = () => {
-  const { user } = useUser()
+  const { data:session } = useSession()
   const router = useRouter()
   const [rows, setRows] = useState<AppMenu[]>([])
   const { data, loading, error } = useQuery<GetRecipe>(GET_RECIPE, {
     variables: {
-      email: user?.email,
+      email: session?.user?.email,
     },
     fetchPolicy: 'network-only',
   })
@@ -106,7 +105,4 @@ const App = () => {
   )
 }
 
-export default withPageAuthRequired(App, {
-  onRedirecting: () => <BaseLoading />,
-  onError: (error) => <Box>{error.message}</Box>,
-})
+export default App

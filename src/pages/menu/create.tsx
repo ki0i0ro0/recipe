@@ -1,11 +1,9 @@
 import { useMutation } from '@apollo/client'
-import { withPageAuthRequired } from '@auth0/nextjs-auth0'
 import { Add } from '@mui/icons-material'
 import { Avatar, Box, Typography } from '@mui/material'
 import { useRouter } from 'next/router'
 import type { Dispatch, SetStateAction } from 'react'
 import { BaseForm } from '@/components/BaseForm'
-import { BaseLoading } from '@/components/BaseLoading'
 import { BasePage } from '@/components/BasePage'
 import { CREATE_MENU } from '@/graphql/menu/create'
 import type { Menu } from '@/types'
@@ -35,7 +33,4 @@ const App = () => {
   )
 }
 
-export default withPageAuthRequired(App, {
-  onRedirecting: () => <BaseLoading />,
-  onError: (error) => <Box>{error.message}</Box>,
-})
+export default App

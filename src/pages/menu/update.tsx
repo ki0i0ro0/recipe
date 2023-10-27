@@ -1,5 +1,4 @@
-import { useMutation, useQuery } from '@apollo/client'
-import { withPageAuthRequired } from '@auth0/nextjs-auth0'
+import { useMutation } from '@apollo/client'
 import { Add } from '@mui/icons-material'
 import { Avatar, Box, Typography } from '@mui/material'
 import { useRouter } from 'next/router'
@@ -58,7 +57,4 @@ const App = () => {
   )
 }
 
-export default withPageAuthRequired(App, {
-  onRedirecting: () => <BaseLoading />,
-  onError: (error) => <Box>{error.message}</Box>,
-})
+export default App

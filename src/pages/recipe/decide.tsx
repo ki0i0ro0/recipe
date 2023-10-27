@@ -1,9 +1,9 @@
 import { useMutation, useQuery } from '@apollo/client'
-import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0'
 import { AutoMode } from '@mui/icons-material'
 import { LoadingButton } from '@mui/lab'
 import { Avatar, Box, Button, Typography } from '@mui/material'
 import { useRouter } from 'next/router'
+import { useSession } from "next-auth/react"
 import { useEffect, useState } from 'react'
 import { BaseLoading } from '@/components/BaseLoading'
 import { BasePage } from '@/components/BasePage'
@@ -13,13 +13,13 @@ import type { AppMenu, GetRecipe, Menu } from '@/types'
 
 const App = () => {
   const router = useRouter()
-  const { user } = useUser()
+  const { data:session } = useSession()
   const [addUserRecipe] = useMutation(ADD_USER_RECIPE)
   const [menu, setMenu] = useState<Menu>()
   const [unCookedMenus, setUnCookedMenus] = useState<AppMenu[]>([])
   const { data, loading, error } = useQuery<GetRecipe>(GET_RECIPE, {
     variables: {
-      email: user?.email,
+      email: session?.user?.email,
     },
   })
 
@@ -54,7 +54,7 @@ const App = () => {
   const handleUpdate = async (id: number) => {
     await addUserRecipe({
       variables: {
-        email: user?.email,
+        email: session?.user?.email,
         menuId: id,
       },
     })
@@ -96,7 +96,4 @@ const App = () => {
   )
 }
 
-export default withPageAuthRequired(App, {
-  onRedirecting: () => <BaseLoading />,
-  onError: (error) => <Box>{error.message}</Box>,
-})
+export default App
