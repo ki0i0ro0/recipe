@@ -20,8 +20,8 @@ graph ql
 
 ## 環境変数
 
-- auth0 関連
-- firebase realtime db 関連
+- Firestore関連
+- NextAuth関連
 
 ## 参考
 
