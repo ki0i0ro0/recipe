@@ -1,7 +1,8 @@
+"use client";
 import { useMutation } from "@apollo/client";
 import { Add } from "@mui/icons-material";
 import { Avatar, Box, Typography } from "@mui/material";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import type { Dispatch, SetStateAction } from "react";
 import { BaseForm } from "@/components/BaseForm";
 import { BasePage } from "@/components/BasePage";
@@ -22,7 +23,7 @@ const App = () => {
       variables: { ...value },
     });
     setLoading(false);
-    router.push({ pathname: "/" });
+    router.push("/");
   };
 
   return (

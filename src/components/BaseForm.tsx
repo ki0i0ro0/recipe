@@ -2,7 +2,7 @@ import { Add, Edit } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
 import { Button, Stack, TextField } from "@mui/material";
 import { useFormik } from "formik";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { Dispatch, SetStateAction, useState } from "react";
 import * as Yup from "yup";
 import { Menu } from "@/types";

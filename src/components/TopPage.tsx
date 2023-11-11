@@ -1,3 +1,4 @@
+"use client";
 import { useQuery } from "@apollo/client";
 import { AutoMode, MenuBook } from "@mui/icons-material";
 import {
@@ -9,7 +10,7 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { BaseDrawer } from "@/components/BaseDrawer";

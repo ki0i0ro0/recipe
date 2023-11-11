@@ -1,8 +1,9 @@
+"use client";
 import { useMutation } from "@apollo/client";
 import { Add, Delete } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
 import { Avatar, Box, Button, Typography } from "@mui/material";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 import { BaseLoading } from "@/components/BaseLoading";

@@ -19,7 +19,7 @@ import ListItemText from "@mui/material/ListItemText";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { styled, useTheme } from "@mui/material/styles";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import * as React from "react";
 
 const drawerWidth = 240;

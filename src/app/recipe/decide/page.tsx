@@ -1,8 +1,9 @@
+"use client";
 import { useMutation, useQuery } from "@apollo/client";
 import { AutoMode } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
 import { Avatar, Box, Button, Typography } from "@mui/material";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { BaseLoading } from "@/components/BaseLoading";
@@ -65,7 +66,7 @@ const App = () => {
         menuId: id,
       },
     });
-    router.push({ pathname: `/` });
+    router.push("/");
   };
 
   return (
