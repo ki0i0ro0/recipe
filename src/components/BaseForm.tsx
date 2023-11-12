@@ -1,59 +1,33 @@
 import { Add, Edit } from "@mui/icons-material";
-import { LoadingButton } from "@mui/lab";
 import { Button, Stack, TextField } from "@mui/material";
-import { useFormik } from "formik";
-import { useRouter } from "next/navigation";
-import { Dispatch, SetStateAction, useState } from "react";
-import * as Yup from "yup";
 import { Menu } from "@/types";
-
-const FORM_SCHEMA = Yup.object({
-  name: Yup.string().required(),
-  url: Yup.string(),
-});
+import Link from "next/link";
 
 interface Props {
   initialValues: Menu;
-  onSubmit: (
-    values: Menu,
-    setLoading: Dispatch<SetStateAction<boolean>>,
-  ) => void;
-  onDelete?: (
-    values: Menu,
-    setLoading: Dispatch<SetStateAction<boolean>>,
-  ) => void;
+  onSubmit: (values: FormData) => void;
+  onDelete?: (values: FormData) => void;
   type: string;
 }
 
-export const BaseForm = (props: Props): JSX.Element => {
-  const router = useRouter();
-  const { initialValues, onSubmit, type = "create", onDelete } = props;
-  const [loading, setLoading] = useState(false);
-  const formik = useFormik({
-    initialValues: initialValues,
-    validationSchema: FORM_SCHEMA,
-    onSubmit: (values: Menu) => {
-      onSubmit(values, setLoading);
-    },
-  });
-
-  const handleDelete = () => {
-    if (onDelete) {
-      onDelete(initialValues, setLoading);
-    }
-  };
-
+export const BaseForm = ({
+  initialValues,
+  onSubmit,
+  type = "create",
+  onDelete,
+}: Props): JSX.Element => {
   const icon = type === "create" ? <Add /> : <Edit />;
 
   return (
-    <form onSubmit={formik.handleSubmit}>
+    <form>
+      <input type="hidden" name="id" value={initialValues.id} />
       <TextField
         fullWidth
         margin="normal"
         name="name"
         label="メニュー名"
-        value={formik.values.name}
-        onChange={formik.handleChange}
+        defaultValue={initialValues.name}
+        type="text"
         required
       />
       <TextField
@@ -61,24 +35,19 @@ export const BaseForm = (props: Props): JSX.Element => {
         margin="normal"
         name="url"
         label="レシピURL"
-        value={formik.values.url}
-        onChange={formik.handleChange}
+        defaultValue={initialValues.url}
+        type="text"
       />
       <Stack>
-        <LoadingButton type="submit" startIcon={icon} loading={loading}>
-          OK
-        </LoadingButton>
-        <Button
-          type="reset"
-          onClick={() => {
-            router.push("/");
-          }}
-        >
-          Cancel
+        <Button type="submit" startIcon={icon} formAction={onSubmit}>
+          はい
+        </Button>
+        <Button>
+          <Link href="/">戻る</Link>
         </Button>
         {type === "update" && (
           <>
-            <Button type="button" onClick={handleDelete}>
+            <Button type="submit" formAction={onDelete}>
               Delete
             </Button>
           </>
