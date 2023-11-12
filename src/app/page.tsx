@@ -1,7 +1,7 @@
 import { TopPage } from "@/components/TopPage";
-import { Login } from "@/components/login";
 import { getServerSession } from "next-auth";
 import { getRecipeMenu } from "./actions";
+import { redirect } from "next/navigation";
 
 export default async function Page() {
   const session = await getServerSession();
@@ -9,5 +9,5 @@ export default async function Page() {
     const data = await getRecipeMenu();
     return <TopPage data={data} />;
   }
-  return <Login />;
+  redirect("/login");
 }
