@@ -1,52 +1,19 @@
-"use client";
-import { useMutation } from "@apollo/client";
 import { Add } from "@mui/icons-material";
-import { Avatar, Box, Typography } from "@mui/material";
-import { useRouter } from "next/navigation";
-import type { Dispatch, SetStateAction } from "react";
+import { Avatar, Typography } from "@mui/material";
 import { BaseForm } from "@/components/BaseForm";
-import { BaseLoading } from "@/components/BaseLoading";
 import { BasePage } from "@/components/BasePage";
-import { DELETE_MENU } from "@/graphql/menu/delete";
-import { UPDATE_MENU } from "@/graphql/menu/update";
-import { userMenuState } from "@/stores/userMenu";
-import type { Menu } from "@/types";
+import { handleDeleteMenu, handleUpdateMenu } from "@/app/actions";
+import { getMenu } from "@/server/firestore";
+import { redirect } from "next/navigation";
 
-const App = () => {
-  const router = useRouter();
-  const userMenu = userMenuState();
-  const [updateMenuHook] = useMutation(UPDATE_MENU);
-  const [deleteMenuHook] = useMutation(DELETE_MENU);
+type Props = { searchParams: { [key: string]: string | string[] | undefined } };
 
-  const updateMenu = async (
-    value: Menu,
-    setLoading: Dispatch<SetStateAction<boolean>>,
-  ) => {
-    setLoading(true);
-    await updateMenuHook({
-      variables: { ...value },
-    });
-    setLoading(false);
-    router.push("/");
-  };
+const App = async ({ searchParams }: Props) => {
+  const menu = await getMenu({ id: Number(searchParams.id ?? 0) });
 
-  const deleteMenu = async (
-    value: Menu,
-    setLoading: Dispatch<SetStateAction<boolean>>,
-  ) => {
-    setLoading(true);
-    await deleteMenuHook({
-      variables: { id: value.id },
-    });
-    setLoading(false);
-    router.push("/");
-  };
-
-  const menu: Menu = {
-    id: userMenu.menuId,
-    name: userMenu.menuName,
-    url: userMenu.url || "",
-  };
+  if (!menu) {
+    redirect("/");
+  }
 
   return (
     <BasePage>
@@ -56,9 +23,9 @@ const App = () => {
       <Typography textAlign="center">メニューを編集</Typography>
       <BaseForm
         initialValues={{ ...menu }}
-        onSubmit={updateMenu}
+        onSubmit={handleUpdateMenu}
         type="update"
-        onDelete={deleteMenu}
+        onDelete={handleDeleteMenu}
       />
     </BasePage>
   );
