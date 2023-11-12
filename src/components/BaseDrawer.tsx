@@ -9,6 +9,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { styled } from "@mui/material/styles";
 import Link from "next/link";
+import { Logout } from "./Logout";
 
 const drawerWidth = 0;
 
@@ -76,9 +77,7 @@ export const BaseDrawer = ({ children }: { children: React.ReactNode }) => {
           <Button color="inherit">
             <Link href="/recipe/decide">メニュー追加</Link>
           </Button>
-          <Button color="inherit">
-            <Link href="/api/auth/logout">ログアウト</Link>
-          </Button>
+          <Logout />
         </Toolbar>
       </AppBar>
       <Main open={true}>
