@@ -1,5 +1,4 @@
 "use client";
-import { useQuery } from "@apollo/client";
 import { AutoMode, MenuBook } from "@mui/icons-material";
 import {
   IconButton,
@@ -11,24 +10,15 @@ import {
   TableRow,
 } from "@mui/material";
 import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { BaseDrawer } from "@/components/BaseDrawer";
 import { BaseLoading } from "@/components/BaseLoading";
-import { GET_RECIPE } from "@/graphql/recipe/get";
 import { userMenuState } from "@/stores/userMenu";
 import type { AppMenu, GetRecipe } from "@/types";
 
-export const TopPage = () => {
-  const { data: session } = useSession();
+export const TopPage = ({ data }: { data: GetRecipe }) => {
   const router = useRouter();
   const [rows, setRows] = useState<AppMenu[]>([]);
-  const { data, loading, error } = useQuery<GetRecipe>(GET_RECIPE, {
-    variables: {
-      email: session?.user?.email,
-    },
-    fetchPolicy: "network-only",
-  });
 
   useEffect(() => {
     if (data) {
@@ -49,8 +39,6 @@ export const TopPage = () => {
     }
   }, [data]);
 
-  if (loading) return <BaseLoading />;
-  if (error) return <p>エラーが発生しています</p>;
   if (!data) return <BaseLoading />;
 
   const handleUpdate = (row: AppMenu) => {

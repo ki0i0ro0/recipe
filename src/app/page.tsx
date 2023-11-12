@@ -1,16 +1,13 @@
-"use client";
-import { useSession, signIn } from "next-auth/react";
 import { TopPage } from "@/components/TopPage";
+import { Login } from "@/components/login";
+import { getServerSession } from "next-auth";
+import { getRecipeMenu } from "./actions";
 
-export default function Home() {
-  const { data: session } = useSession();
+export default async function Page() {
+  const session = await getServerSession();
   if (session) {
-    return <TopPage />;
+    const data = await getRecipeMenu();
+    return <TopPage data={data} />;
   }
-  return (
-    <>
-      Not signed in <br />
-      <button onClick={() => signIn()}>Sign in</button>
-    </>
-  );
+  return <Login />;
 }
