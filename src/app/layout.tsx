@@ -1,7 +1,7 @@
 "use client";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./globals.css";
+import "@/styles/globals.css";
 import { SessionProvider } from "next-auth/react";
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 
