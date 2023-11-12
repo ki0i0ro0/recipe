@@ -3,14 +3,8 @@
 ## 構成
 
 - next.js
-- auth0
+- Auth.js(旧:NextAuth)
 - firebase realtime database
-
-## api
-
-graph ql
-グループ毎の履歴を取得できる
-グループに対してレシピリクエストを送ることができる
 
 ## UI
 
