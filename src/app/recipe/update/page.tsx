@@ -1,51 +1,17 @@
-"use client";
-import { useMutation } from "@apollo/client";
 import { Add, Delete } from "@mui/icons-material";
-import { LoadingButton } from "@mui/lab";
-import { Avatar, Box, Button, Typography } from "@mui/material";
-import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
-import { useState } from "react";
-import { BaseLoading } from "@/components/BaseLoading";
+import { Avatar, Box, Button, Stack, Typography } from "@mui/material";
 import { BasePage } from "@/components/BasePage";
-import { ADD_USER_RECIPE } from "@/graphql/recipe/add";
-import { REMOVE_USER_RECIPE } from "@/graphql/recipe/remove";
-import { userMenuState } from "@/stores/userMenu";
+import { handleAddUserRecipe, handleDeleteUserRecipe } from "@/app/actions";
+import Link from "next/link";
+type Props = { searchParams: { [key: string]: string | string[] | undefined } };
 
-const App = () => {
-  const { data: session } = useSession();
-  const router = useRouter();
-  const userMenu = userMenuState();
-  const [addUserRecipe] = useMutation(ADD_USER_RECIPE);
-  const [removeUserRecipe] = useMutation(REMOVE_USER_RECIPE);
-  const [processing, setProcessing] = useState(false);
-
-  // レシピ作成
-  const handleAddUserRecipe = async (menuId: number) => {
-    setProcessing(true);
-    await addUserRecipe({
-      variables: {
-        email: session?.user?.email,
-        menuId: menuId,
-      },
-    });
-    setProcessing(false);
-    router.push("/");
+const App = ({ searchParams }: Props) => {
+  const userMenu = {
+    createdAt: searchParams.createdAt,
+    menuName: searchParams.menuName,
+    menuId: searchParams.menuId,
+    recipeId: searchParams.recipeId,
   };
-
-  // レシピ削除
-  const handleRemoveUserRecipe = async (recipeId: number) => {
-    setProcessing(true);
-    await removeUserRecipe({
-      variables: {
-        email: session?.user?.email,
-        recipeId: recipeId,
-      },
-    });
-    setProcessing(false);
-    router.push("/");
-  };
-
   const isCreateMode = userMenu.createdAt == "";
 
   return (
@@ -61,34 +27,23 @@ const App = () => {
         <Typography color="text.secondary" gutterBottom>
           {isCreateMode ? "を作りましたか？" : "を取り消しますか？"}
         </Typography>
-        <LoadingButton
-          onClick={() => {
-            if (isCreateMode) {
-              handleAddUserRecipe(userMenu.menuId);
-            } else {
-              handleRemoveUserRecipe(userMenu.recipeId);
-            }
-          }}
-          loading={processing}
+        <form
+          action={isCreateMode ? handleAddUserRecipe : handleDeleteUserRecipe}
         >
-          OK
-        </LoadingButton>
-        <Button
-          disabled={processing}
-          onClick={() => {
-            router.push("/");
-          }}
-        >
-          Cancel
-        </Button>
-        <Button
-          disabled={processing}
-          onClick={() => {
-            router.push("/menu/update");
-          }}
-        >
-          Edit
-        </Button>
+          <input type="hidden" name="menuId" value={userMenu.menuId} />
+          <input type="hidden" name="recipeId" value={userMenu.recipeId} />
+          <Stack>
+            <Button type="submit">はい</Button>
+            <Button>
+              <Link href={`/menu/update?id=${userMenu.menuId}`}>
+                メニューを編集
+              </Link>
+            </Button>
+            <Button>
+              <Link href="/">戻る</Link>
+            </Button>
+          </Stack>
+        </form>
       </Box>
     </BasePage>
   );
