@@ -1,3 +1,4 @@
+"use server";
 import { Menu, Recipe } from "@/types";
 import * as admin from "firebase-admin";
 
