@@ -1,28 +1,16 @@
-import { DinnerDining } from "@mui/icons-material";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import MenuIcon from "@mui/icons-material/Menu";
+"use client";
 import { Button } from "@mui/material";
 import MuiAppBar, {
   type AppBarProps as MuiAppBarProps,
 } from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
-import Divider from "@mui/material/Divider";
-import Drawer from "@mui/material/Drawer";
-import IconButton from "@mui/material/IconButton";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import { styled, useTheme } from "@mui/material/styles";
-import { useRouter } from "next/navigation";
-import * as React from "react";
+import { styled } from "@mui/material/styles";
+import Link from "next/link";
 
-const drawerWidth = 240;
+const drawerWidth = 0;
 
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
   open?: boolean;
@@ -74,84 +62,26 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 }));
 
 export const BaseDrawer = ({ children }: { children: React.ReactNode }) => {
-  const router = useRouter();
-  const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
-
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
-
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
-      <AppBar position="fixed" open={open}>
+      <AppBar position="fixed">
         <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            sx={{ mr: 2, ...(open && { display: "none" }) }}
-          >
-            <MenuIcon />
-          </IconButton>
           <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
             Recipe App
           </Typography>
-          <Button
-            color="inherit"
-            onClick={() => {
-              router.push("/api/auth/logout");
-            }}
-          >
-            Logout
+          <Button color="inherit">
+            <Link href="/recipe/decide">ランダム</Link>
+          </Button>
+          <Button color="inherit">
+            <Link href="/recipe/decide">メニュー追加</Link>
+          </Button>
+          <Button color="inherit">
+            <Link href="/api/auth/logout">ログアウト</Link>
           </Button>
         </Toolbar>
       </AppBar>
-      <Drawer
-        sx={{
-          width: drawerWidth,
-          flexShrink: 0,
-          "& .MuiDrawer-paper": {
-            width: drawerWidth,
-            boxSizing: "border-box",
-          },
-        }}
-        variant="persistent"
-        anchor="left"
-        open={open}
-      >
-        <DrawerHeader>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === "ltr" ? (
-              <ChevronLeftIcon />
-            ) : (
-              <ChevronRightIcon />
-            )}
-          </IconButton>
-        </DrawerHeader>
-        <Divider />
-        <List>
-          <ListItem key={"Add Menu"} disablePadding>
-            <ListItemButton
-              onClick={() => {
-                router.push("/menu/create");
-              }}
-            >
-              <ListItemIcon>
-                <DinnerDining />
-              </ListItemIcon>
-              <ListItemText primary={"Add Menu"} />
-            </ListItemButton>
-          </ListItem>
-        </List>
-      </Drawer>
-      <Main open={open}>
+      <Main open={true}>
         <DrawerHeader />
         {children}
       </Main>
