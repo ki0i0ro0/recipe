@@ -5,7 +5,7 @@ import { handleAddUserRecipe, handleDeleteUserRecipe } from "@/app/actions";
 import Link from "next/link";
 type Props = { searchParams: { [key: string]: string | string[] | undefined } };
 
-const App = ({ searchParams }: Props) => {
+export default function Page({ searchParams }: Props) {
   const userMenu = {
     createdAt: searchParams.createdAt,
     menuName: searchParams.menuName,
@@ -47,6 +47,4 @@ const App = ({ searchParams }: Props) => {
       </Box>
     </BasePage>
   );
-};
-
-export default App;
+}

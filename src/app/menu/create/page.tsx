@@ -5,7 +5,7 @@ import { BasePage } from "@/components/BasePage";
 import type { Menu } from "@/types";
 import { handleCreateMenu } from "@/app/actions";
 
-const App = () => {
+export default async function Page() {
   const initialValues: Menu = { id: 0, name: "", url: "" };
 
   return (
@@ -21,6 +21,4 @@ const App = () => {
       />
     </BasePage>
   );
-};
-
-export default App;
+}

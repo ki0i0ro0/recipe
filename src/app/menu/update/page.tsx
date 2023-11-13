@@ -8,7 +8,7 @@ import { redirect } from "next/navigation";
 
 type Props = { searchParams: { [key: string]: string | string[] | undefined } };
 
-const App = async ({ searchParams }: Props) => {
+export default async function Page({ searchParams }: Props) {
   const menu = await getMenu({ id: Number(searchParams.id ?? 0) });
 
   if (!menu) {
@@ -29,6 +29,4 @@ const App = async ({ searchParams }: Props) => {
       />
     </BasePage>
   );
-};
-
-export default App;
+}

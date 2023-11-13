@@ -5,7 +5,7 @@ import type { AppMenu, Menu } from "@/types";
 import { getCookedMenu, handleAddUserRecipe } from "@/app/actions";
 import Link from "next/link";
 
-const App = async () => {
+export default async function Page() {
   let menu: Menu;
   const cookedMenus = await getCookedMenu();
 
@@ -53,6 +53,4 @@ const App = async () => {
       </Box>
     </BasePage>
   );
-};
-
-export default App;
+}
