@@ -7,6 +7,7 @@ export interface Recipe {
 export interface Menu {
   id: number;
   name: string;
+  phoneticGuides?: string;
   url: string;
 }
 
@@ -18,6 +19,7 @@ export interface GetRecipe {
 export interface AppMenu {
   menuId: number;
   menuName: string;
+  menuPhoneticGuides?: string;
   createdAt: string;
   recipeId: number;
   url?: string;

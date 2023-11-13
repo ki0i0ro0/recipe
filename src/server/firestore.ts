@@ -23,11 +23,11 @@ if (admin.apps.length === 0) {
 const db = admin.firestore();
 
 /**
- * Get user's id by email address
+ * メールアドレスからユーザーIDを取得
  * @param email
  * @returns
  */
-export const getUserId = async (email: string) => {
+export const getUserIdByEmail = async (email: string) => {
   const userRef = db.collection("users").doc(email);
   const doc = await userRef.get();
   return doc.exists ? doc.data()?.id : 0;
@@ -40,12 +40,12 @@ export const getNewId = () => {
 };
 
 /**
- * Get user recipe list by email address
+ * ユーザーレシピの取得
  * @param args
  * @returns
  */
-export const getRecipe = async (args: { email: string }) => {
-  const userId = await getUserId(args.email);
+export const getUserRecipe = async (args: { email: string }) => {
+  const userId = await getUserIdByEmail(args.email);
   const userRecipes = await db
     .collection("recipes")
     .where("userId", "==", userId)
@@ -56,7 +56,7 @@ export const getRecipe = async (args: { email: string }) => {
 };
 
 /**
- * Create user related menu
+ * ユーザーレシピの追加
  * @param args
  * @returns
  */
@@ -64,7 +64,7 @@ export const addUserRecipe = async (args: {
   email: string;
   menuId: number;
 }) => {
-  const userId = await getUserId(args.email);
+  const userId = await getUserIdByEmail(args.email);
   const id = getNewId();
   const docRef = db
     .collection("recipes")
@@ -80,7 +80,7 @@ export const addUserRecipe = async (args: {
 };
 
 /**
- * Delete user's one recipe
+ * ユーザーレシピの削除
  * @param args
  * @returns
  */
@@ -95,42 +95,25 @@ export const removeUserRecipe = async (args: { recipeId: number }) => {
 };
 
 /**
- * Create Menu
- * @param args
- * @returns
- */
-export const createMenu = async (args: { name: string; url?: string }) => {
-  const { name, url } = args;
-  const id = getNewId();
-  const docRef = db
-    .collection("menus")
-    .doc(id) as admin.firestore.DocumentReference<Menu>;
-  const data = {
-    id: +id,
-    name,
-    url: url || "",
-  };
-  await docRef.set(data);
-  return data;
-};
-
-/**
- * Update Menu
+ * メニューの追加・更新
  * @param args
  * @returns
  */
 export const updateMenu = async (args: {
-  id: number;
+  id?: number;
+  phoneticGuides?: string;
   name: string;
   url: string;
 }) => {
-  const { id, name, url } = args;
+  const { id, name, url, phoneticGuides } = args;
+  const menuId = id ?? Number(getNewId());
   const docRef = db
     .collection("menus")
-    .doc(id.toString()) as admin.firestore.DocumentReference<Menu>;
+    .doc(menuId.toString()) as admin.firestore.DocumentReference<Menu>;
   const data = {
-    id,
+    id: menuId,
     name,
+    phoneticGuides: phoneticGuides || name,
     url: url || "",
   };
   await docRef.set(data);
@@ -138,7 +121,7 @@ export const updateMenu = async (args: {
 };
 
 /**
- * Delete one menu
+ * メニューの削除
  * @param args
  * @returns
  */
@@ -153,7 +136,7 @@ export const deleteMenu = async (args: { id: number }) => {
 };
 
 /**
- * Get one menu
+ * メニューの取得
  * @param args
  * @returns
  */
@@ -166,7 +149,7 @@ export const getMenu = async (args: { id: number }) => {
 };
 
 /**
- * Get All Menu
+ * メニューの一覧取得
  * @returns
  */
 export const getMenus = async () => {

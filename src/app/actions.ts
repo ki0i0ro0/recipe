@@ -1,10 +1,9 @@
 "use server";
 import {
   addUserRecipe,
-  createMenu,
   deleteMenu,
   getMenus,
-  getRecipe,
+  getUserRecipe,
   removeUserRecipe,
   updateMenu,
 } from "@/server/firestore";
@@ -12,21 +11,15 @@ import { AppMenu } from "@/types";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 
-export const getRecipeMenu = async () => {
-  const recipe = await getRecipe({ email: await getEmail() });
-  const menus = await getMenus();
-  return { recipe, menus };
-};
-
 export const getCookedMenu = async () => {
-  const data = await getRecipeMenu();
-  const cookedMenus: AppMenu[] = data?.menus.map((menu) => {
-    const cookedMenu = data?.recipe.find(
-      (userMenu) => userMenu.menuId === menu.id,
-    );
+  const recipe = await getUserRecipe({ email: await getEmail() });
+  const menus = await getMenus();
+  const cookedMenus: AppMenu[] = menus.map((menu) => {
+    const cookedMenu = recipe.find((userMenu) => userMenu.menuId === menu.id);
     return {
       menuId: menu.id ?? 0,
       menuName: menu.name,
+      menuPhoneticGuides: menu.phoneticGuides,
       createdAt: cookedMenu?.createdAt || "",
       recipeId: cookedMenu?.id ?? 0,
     };
@@ -46,23 +39,23 @@ export const handleDeleteUserRecipe = async (data: FormData) => {
   redirect("/");
 };
 
-export const handleCreateMenu = async (data: FormData) => {
-  await createMenu({
-    name: String(data.get("name") ?? ""),
-    url: String(data.get("url") ?? ""),
-  });
-  redirect("/");
-};
-
+/**
+ * メニューの追加・更新
+ * @param data
+ */
 export const handleUpdateMenu = async (data: FormData) => {
   await updateMenu({
-    id: Number(data.get("id") ?? 0),
+    id: data.has("id") ? Number(data.get("id")) : undefined,
+    phoneticGuides: String(data.get("phoneticGuides") ?? ""),
     name: String(data.get("name") ?? ""),
     url: String(data.get("url") ?? ""),
   });
   redirect("/");
 };
-
+/**
+ * メニューの削除
+ * @param data
+ */
 export const handleDeleteMenu = async (data: FormData) => {
   await deleteMenu({ id: Number(data.get("id") ?? 0) });
   redirect("/");

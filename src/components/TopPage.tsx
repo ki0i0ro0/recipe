@@ -8,23 +8,18 @@ import {
 } from "@mui/material";
 import { BaseDrawer } from "@/components/BaseDrawer";
 import Link from "next/link";
-import type { AppMenu, GetRecipe } from "@/types";
+import { getCookedMenu } from "@/app/actions";
 
-export const TopPage = ({ data }: { data: GetRecipe }) => {
-  const cookedMenus: AppMenu[] = data?.menus.map((menu) => {
-    const cookedMenu = data?.recipe.find(
-      (userMenu) => +userMenu.menuId === +menu.id,
-    );
-    return {
-      menuId: menu.id,
-      menuName: menu.name,
-      url: menu.url,
-      createdAt: cookedMenu?.createdAt || "",
-      recipeId: cookedMenu?.id ?? 0,
-    };
+export const TopPage = async () => {
+  const data = await getCookedMenu();
+  // 名前順にソート
+  data.sort((a, b) => {
+    const aName = a.menuPhoneticGuides ?? a.menuName;
+    const bName = b.menuPhoneticGuides ?? b.menuName;
+    return aName.localeCompare(bName, "ja");
   });
-  cookedMenus.sort((a, b) => (a.createdAt < b.createdAt ? -1 : 1));
-  const rows = cookedMenus || [];
+  data.sort((a, b) => (a.createdAt < b.createdAt ? -1 : 1));
+  const rows = data || [];
 
   return (
     <BaseDrawer>
