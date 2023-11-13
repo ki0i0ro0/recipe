@@ -45,7 +45,7 @@ export const handleDeleteUserRecipe = async (data: FormData) => {
  */
 export const handleUpdateMenu = async (data: FormData) => {
   await updateMenu({
-    id: data.has("id") ? Number(data.get("id")) : undefined,
+    id: data.get("id") ? Number(data.get("id")) : undefined,
     phoneticGuides: String(data.get("phoneticGuides") ?? ""),
     name: String(data.get("name") ?? ""),
     url: String(data.get("url") ?? ""),
