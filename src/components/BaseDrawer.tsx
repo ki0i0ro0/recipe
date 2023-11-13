@@ -14,7 +14,7 @@ export const BaseDrawer = ({ children }: { children: React.ReactNode }) => {
             <Link href="/recipe/decide">ランダム</Link>
           </Button>
           <Button color="inherit">
-            <Link href="/recipe/decide">メニュー追加</Link>
+            <Link href="/menu/create">メニュー追加</Link>
           </Button>
           <Logout />
         </Toolbar>
