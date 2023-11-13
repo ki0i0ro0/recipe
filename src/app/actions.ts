@@ -16,7 +16,7 @@ export const getCookedMenu = async () => {
   const menus = await getMenus();
   const cookedMenus: AppMenu[] = menus.map((menu) => {
     const cookedMenu = recipe.find(
-      (userMenu) => userMenu.menuId.toString() === menu.id.toString(),
+      (userMenu) => userMenu.menuId.toString() === menu.id,
     );
     return {
       menuId: menu.id,

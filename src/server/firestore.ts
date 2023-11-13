@@ -3,11 +3,8 @@ import { Menu, Recipe } from "@/types";
 import * as admin from "firebase-admin";
 import crypto from "crypto";
 
-interface UserRecipe {
-  id: string;
-  menuId: string;
+interface DBRecipe extends Omit<Recipe, "id"> {
   userId: string;
-  createdAt: string;
 }
 
 interface DBMenu extends Omit<Menu, "id"> {}
@@ -58,7 +55,9 @@ export const getUserRecipe = async (args: {
     .where("userId", "==", userId)
     .get();
   const buff: Recipe[] = [];
-  userRecipes.forEach((userRecipe) => buff.push(userRecipe.data() as Recipe));
+  userRecipes.forEach((userRecipe) =>
+    buff.push({ ...userRecipe.data(), id: userRecipe.id } as Recipe),
+  );
   return buff;
 };
 
@@ -74,7 +73,7 @@ export const addUserRecipe = async (args: {
   const userId = await getUserIdByEmail(args.email);
   const docRef = db
     .collection("recipes")
-    .doc() as admin.firestore.DocumentReference<UserRecipe>;
+    .doc() as admin.firestore.DocumentReference<DBRecipe>;
   const data = {
     id: docRef.id,
     userId: userId,
@@ -90,10 +89,7 @@ export const addUserRecipe = async (args: {
  * @returns
  */
 export const removeUserRecipe = async (args: { recipeId: string }) => {
-  const docRef = db
-    .collection("recipes")
-    .doc(args.recipeId) as admin.firestore.DocumentReference<UserRecipe>;
-  await docRef.delete();
+  await db.collection("recipes").doc(args.recipeId).delete();
 };
 
 /**
@@ -155,6 +151,6 @@ export const getMenu = async (args: { id: string }): Promise<Menu> => {
 export const getMenus = async (): Promise<Menu[]> => {
   const menus = await db.collection("menus").get();
   const buff: Menu[] = [];
-  menus.forEach((menu) => buff.push({ id: menu.id, ...menu.data() } as Menu));
+  menus.forEach((menu) => buff.push({ ...menu.data(), id: menu.id } as Menu));
   return buff;
 };
