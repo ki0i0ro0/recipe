@@ -13,8 +13,7 @@ import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 
 export const getRecipeMenu = async () => {
-  const session = await getServerSession();
-  const recipe = await getRecipe({ email: session?.user?.email || "" });
+  const recipe = await getRecipe({ email: await getEmail() });
   const menus = await getMenus();
   return { recipe, menus };
 };
@@ -36,9 +35,8 @@ export const getCookedMenu = async () => {
 };
 
 export const handleAddUserRecipe = async (data: FormData) => {
-  const session = await getServerSession();
   const menuId = Number(data.get("menuId") ?? 0);
-  await addUserRecipe({ email: session?.user?.email || "", menuId });
+  await addUserRecipe({ email: await getEmail(), menuId });
   redirect("/");
 };
 
@@ -49,7 +47,6 @@ export const handleDeleteUserRecipe = async (data: FormData) => {
 };
 
 export const handleCreateMenu = async (data: FormData) => {
-  console.log(data);
   await createMenu({
     name: String(data.get("name") ?? ""),
     url: String(data.get("url") ?? ""),
@@ -69,4 +66,9 @@ export const handleUpdateMenu = async (data: FormData) => {
 export const handleDeleteMenu = async (data: FormData) => {
   await deleteMenu({ id: Number(data.get("id") ?? 0) });
   redirect("/");
+};
+
+const getEmail = async () => {
+  const session = await getServerSession();
+  return session?.user?.email || "";
 };
