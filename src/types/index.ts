@@ -1,11 +1,11 @@
 export interface Recipe {
-  id: number;
-  menuId: number;
+  id: string;
+  menuId: string;
   createdAt: string;
 }
 
 export interface Menu {
-  id: number;
+  id: string;
   name: string;
   phoneticGuides?: string;
   url: string;
@@ -17,11 +17,11 @@ export interface GetRecipe {
 }
 
 export interface AppMenu {
-  menuId: number;
+  menuId: string;
   menuName: string;
   menuPhoneticGuides?: string;
   createdAt: string;
-  recipeId: number;
+  recipeId: string;
   url?: string;
 }
 

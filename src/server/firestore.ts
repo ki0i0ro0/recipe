@@ -1,13 +1,16 @@
 "use server";
 import { Menu, Recipe } from "@/types";
 import * as admin from "firebase-admin";
+import crypto from "crypto";
 
 interface UserRecipe {
-  id: number;
-  menuId: number;
-  userId: number;
-  createdAt: String;
+  id: string;
+  menuId: string;
+  userId: string;
+  createdAt: string;
 }
+
+interface DBMenu extends Omit<Menu, "id"> {}
 
 if (admin.apps.length === 0) {
   admin.initializeApp({
@@ -27,16 +30,18 @@ const db = admin.firestore();
  * @param email
  * @returns
  */
-export const getUserIdByEmail = async (email: string) => {
+export const getUserIdByEmail = async (email: string): Promise<string> => {
   const userRef = db.collection("users").doc(email);
   const doc = await userRef.get();
-  return doc.exists ? doc.data()?.id : 0;
-};
-
-export const getNewId = () => {
-  const idNum = +new Date();
-  const id = idNum.toString().slice(0, -3);
-  return id;
+  let userId = "";
+  if (doc.exists) {
+    userId = doc.data()!.id;
+  } else {
+    const newUserRef = db.collection("users").doc(email);
+    userId = crypto.randomUUID();
+    await newUserRef.set({ id: userId });
+  }
+  return userId;
 };
 
 /**
@@ -44,7 +49,9 @@ export const getNewId = () => {
  * @param args
  * @returns
  */
-export const getUserRecipe = async (args: { email: string }) => {
+export const getUserRecipe = async (args: {
+  email: string;
+}): Promise<Recipe[]> => {
   const userId = await getUserIdByEmail(args.email);
   const userRecipes = await db
     .collection("recipes")
@@ -62,21 +69,19 @@ export const getUserRecipe = async (args: { email: string }) => {
  */
 export const addUserRecipe = async (args: {
   email: string;
-  menuId: number;
+  menuId: string;
 }) => {
   const userId = await getUserIdByEmail(args.email);
-  const id = getNewId();
   const docRef = db
     .collection("recipes")
-    .doc(id) as admin.firestore.DocumentReference<UserRecipe>;
+    .doc() as admin.firestore.DocumentReference<UserRecipe>;
   const data = {
-    id: +id,
+    id: docRef.id,
     userId: userId,
     menuId: args.menuId,
     createdAt: new Date().toString(),
   };
   await docRef.set(data);
-  return data;
 };
 
 /**
@@ -84,14 +89,11 @@ export const addUserRecipe = async (args: {
  * @param args
  * @returns
  */
-export const removeUserRecipe = async (args: { recipeId: number }) => {
-  const { recipeId } = args;
+export const removeUserRecipe = async (args: { recipeId: string }) => {
   const docRef = db
     .collection("recipes")
-    .doc(recipeId.toString()) as admin.firestore.DocumentReference<UserRecipe>;
-  const res = (await docRef.get()).data();
+    .doc(args.recipeId) as admin.firestore.DocumentReference<UserRecipe>;
   await docRef.delete();
-  return res;
 };
 
 /**
@@ -100,24 +102,25 @@ export const removeUserRecipe = async (args: { recipeId: number }) => {
  * @returns
  */
 export const updateMenu = async (args: {
-  id?: number;
+  id: string;
   phoneticGuides?: string;
   name: string;
   url: string;
 }) => {
   const { id, name, url, phoneticGuides } = args;
-  const menuId = id ?? Number(getNewId());
-  const docRef = db
-    .collection("menus")
-    .doc(menuId.toString()) as admin.firestore.DocumentReference<Menu>;
+  const docRef = id
+    ? (db
+        .collection("menus")
+        .doc(id) as admin.firestore.DocumentReference<DBMenu>)
+    : (db
+        .collection("menus")
+        .doc() as admin.firestore.DocumentReference<DBMenu>);
   const data = {
-    id: menuId,
     name,
     phoneticGuides: phoneticGuides || name,
     url: url || "",
   };
   await docRef.set(data);
-  return data;
 };
 
 /**
@@ -125,14 +128,11 @@ export const updateMenu = async (args: {
  * @param args
  * @returns
  */
-export const deleteMenu = async (args: { id: number }) => {
-  const { id } = args;
+export const deleteMenu = async (args: { id: string }) => {
   const docRef = db
     .collection("menus")
-    .doc(id.toString()) as admin.firestore.DocumentReference<Menu>;
-  const res = (await docRef.get()).data();
+    .doc(args.id) as admin.firestore.DocumentReference<Menu>;
   await docRef.delete();
-  return res;
 };
 
 /**
@@ -140,21 +140,21 @@ export const deleteMenu = async (args: { id: number }) => {
  * @param args
  * @returns
  */
-export const getMenu = async (args: { id: number }) => {
+export const getMenu = async (args: { id: string }): Promise<Menu> => {
   const docRef = (await db
     .collection("menus")
-    .doc(args.id.toString())) as admin.firestore.DocumentReference<Menu>;
+    .doc(args.id)) as admin.firestore.DocumentReference<DBMenu>;
   const data = (await docRef.get()).data();
-  return data;
+  return { id: docRef.id, ...data! };
 };
 
 /**
  * メニューの一覧取得
  * @returns
  */
-export const getMenus = async () => {
+export const getMenus = async (): Promise<Menu[]> => {
   const menus = await db.collection("menus").get();
   const buff: Menu[] = [];
-  menus.forEach((menu) => buff.push(menu.data() as Menu));
+  menus.forEach((menu) => buff.push({ id: menu.id, ...menu.data() } as Menu));
   return buff;
 };

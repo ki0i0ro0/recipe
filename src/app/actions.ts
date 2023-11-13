@@ -15,26 +15,28 @@ export const getCookedMenu = async () => {
   const recipe = await getUserRecipe({ email: await getEmail() });
   const menus = await getMenus();
   const cookedMenus: AppMenu[] = menus.map((menu) => {
-    const cookedMenu = recipe.find((userMenu) => userMenu.menuId === menu.id);
+    const cookedMenu = recipe.find(
+      (userMenu) => userMenu.menuId.toString() === menu.id.toString(),
+    );
     return {
-      menuId: menu.id ?? 0,
+      menuId: menu.id,
       menuName: menu.name,
       menuPhoneticGuides: menu.phoneticGuides,
       createdAt: cookedMenu?.createdAt || "",
-      recipeId: cookedMenu?.id ?? 0,
+      recipeId: cookedMenu?.id || "",
     };
   });
   return cookedMenus;
 };
 
 export const handleAddUserRecipe = async (data: FormData) => {
-  const menuId = Number(data.get("menuId") ?? 0);
+  const menuId = String(data.get("menuId"));
   await addUserRecipe({ email: await getEmail(), menuId });
   redirect("/");
 };
 
 export const handleDeleteUserRecipe = async (data: FormData) => {
-  const recipeId = Number(data.get("recipeId") ?? 0);
+  const recipeId = String(data.get("recipeId"));
   await removeUserRecipe({ recipeId });
   redirect("/");
 };
@@ -45,10 +47,10 @@ export const handleDeleteUserRecipe = async (data: FormData) => {
  */
 export const handleUpdateMenu = async (data: FormData) => {
   await updateMenu({
-    id: data.get("id") ? Number(data.get("id")) : undefined,
+    id: String(data.get("id")),
     phoneticGuides: String(data.get("phoneticGuides") ?? ""),
-    name: String(data.get("name") ?? ""),
-    url: String(data.get("url") ?? ""),
+    name: String(data.get("name")),
+    url: String(data.get("url")),
   });
   redirect("/");
 };
@@ -57,7 +59,7 @@ export const handleUpdateMenu = async (data: FormData) => {
  * @param data
  */
 export const handleDeleteMenu = async (data: FormData) => {
-  await deleteMenu({ id: Number(data.get("id") ?? 0) });
+  await deleteMenu({ id: String(data.get("id")) });
   redirect("/");
 };
 
