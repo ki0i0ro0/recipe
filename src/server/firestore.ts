@@ -70,6 +70,13 @@ export const deleteUserRecipe = async (args: { recipeId: string }) => {
   await db.collection("recipes").doc(args.recipeId).delete();
 };
 
+export const deleteUserRecipes = async (args: { userId: string }) => {
+  const recipes = await getUserRecipe({ userId: args.userId });
+  for (const recipe of recipes) {
+    await deleteUserRecipe({ recipeId: recipe.id });
+  }
+};
+
 export const updateMenu = async (args: {
   id: string;
   phoneticGuides?: string;
