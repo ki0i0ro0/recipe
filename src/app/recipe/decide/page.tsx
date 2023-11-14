@@ -47,7 +47,7 @@ export default async function Page() {
             <Button type="submit" variant="contained">
               はい
             </Button>
-            <Button href="/recipe/decide" color="secondary">
+            <Button href="/recipe/decide" variant="contained" color="secondary">
               やりなおす
             </Button>
             <ReturnButton />
