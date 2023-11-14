@@ -33,11 +33,13 @@ export default function Page({ searchParams }: Props) {
         >
           <input type="hidden" name="menuId" value={userMenu.menuId} />
           <input type="hidden" name="recipeId" value={userMenu.recipeId} />
-          <Stack>
-            <Button type="submit">はい</Button>
-            <Button>
+          <Stack gap={1}>
+            <Button type="submit" variant="contained">
+              はい
+            </Button>
+            <Button variant="contained" color="secondary">
               <Link href={`/menu/update?id=${userMenu.menuId}`}>
-                メニューを編集
+                メニューを編集する
               </Link>
             </Button>
             <ReturnButton />

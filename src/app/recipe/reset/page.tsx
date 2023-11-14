@@ -18,7 +18,7 @@ export default function Page() {
         <form action={handleDeleteUserRecipes}>
           <Stack gap={1}>
             <Button type="submit" variant="contained">
-              リセット
+              はい
             </Button>
             <ReturnButton />
           </Stack>

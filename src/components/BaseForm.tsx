@@ -1,7 +1,5 @@
-import { Add, Edit } from "@mui/icons-material";
 import { Button, Stack, TextField } from "@mui/material";
 import { Menu } from "@/types";
-import Link from "next/link";
 import { handleDeleteMenu, handleUpdateMenu } from "@/app/actions";
 import { ReturnButton } from "./ReturnButton";
 
@@ -14,7 +12,6 @@ export const BaseForm = ({
   initialValues,
   type = "create",
 }: Props): JSX.Element => {
-  const icon = type === "create" ? <Add /> : <Edit />;
   const defaultValues = initialValues ?? {
     name: "",
     url: "",
@@ -49,9 +46,9 @@ export const BaseForm = ({
         defaultValue={defaultValues.url}
         type="text"
       />
-      <Stack>
-        <Button type="submit" startIcon={icon} formAction={handleUpdateMenu}>
-          はい
+      <Stack gap={1}>
+        <Button type="submit" formAction={handleUpdateMenu} variant="contained">
+          保存する
         </Button>
         <ReturnButton />
         {type === "update" && (

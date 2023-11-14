@@ -43,8 +43,10 @@ export default async function Page() {
         </Typography>
         <form action={handleAddUserRecipe}>
           <input type="hidden" name="menuId" value={menu!.id} />
-          <Stack>
-            <Button type="submit">はい</Button>
+          <Stack gap={1}>
+            <Button type="submit" variant="contained">
+              はい
+            </Button>
             <Button href="/recipe/decide">やりなおす</Button>
             <ReturnButton />
           </Stack>
