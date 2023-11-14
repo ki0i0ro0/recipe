@@ -25,4 +25,8 @@ export interface AppMenu {
   url?: string;
 }
 
+export type SearchParams = {
+  searchParams: { [key: string]: string | string[] | undefined };
+};
+
 export type Order = "asc" | "desc";
