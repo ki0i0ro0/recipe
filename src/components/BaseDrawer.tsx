@@ -1,7 +1,7 @@
-import { Button, AppBar, Toolbar, Typography } from "@mui/material";
+import { AppBar, Toolbar, Typography, IconButton } from "@mui/material";
 import Link from "next/link";
 import { Logout } from "./Logout";
-
+import { Shuffle, AddBox } from "@mui/icons-material";
 export const BaseDrawer = ({ children }: { children: React.ReactNode }) => {
   return (
     <>
@@ -10,12 +10,16 @@ export const BaseDrawer = ({ children }: { children: React.ReactNode }) => {
           <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
             Recipe App
           </Typography>
-          <Button color="inherit">
-            <Link href="/recipe/decide">ランダム</Link>
-          </Button>
-          <Button color="inherit">
-            <Link href="/menu/create">メニュー追加</Link>
-          </Button>
+          <IconButton color="inherit">
+            <Link href="/recipe/decide">
+              <Shuffle />
+            </Link>
+          </IconButton>
+          <IconButton color="inherit">
+            <Link href="/menu/create">
+              <AddBox />
+            </Link>
+          </IconButton>
           <Logout />
         </Toolbar>
       </AppBar>
