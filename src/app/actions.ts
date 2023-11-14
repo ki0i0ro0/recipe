@@ -8,6 +8,7 @@ import {
   deleteUserRecipe,
   updateMenu,
   getMenu,
+  deleteUserRecipes,
 } from "@/server/firestore";
 import { AppMenu } from "@/types";
 import { getServerSession } from "next-auth";
@@ -42,6 +43,13 @@ export const handleAddUserRecipe = async (data: FormData) => {
 export const handleDeleteUserRecipe = async (data: FormData) => {
   const recipeId = String(data.get("recipeId"));
   await deleteUserRecipe({ recipeId });
+  redirect("/");
+};
+
+export const handleDeleteUserRecipes = async (data: FormData) => {
+  const email = await getEmail();
+  const userId = await getUserIdByEmail({ email });
+  await deleteUserRecipes({ userId });
   redirect("/");
 };
 
