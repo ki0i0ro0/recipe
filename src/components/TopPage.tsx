@@ -8,10 +8,10 @@ import {
 } from "@mui/material";
 import { BaseDrawer } from "@/components/BaseDrawer";
 import Link from "next/link";
-import { getCookedMenu } from "@/app/actions";
+import { handleGetUserMenu } from "@/app/actions";
 
 export const TopPage = async () => {
-  const data = await getCookedMenu();
+  const data = await handleGetUserMenu();
   // 名前順にソート
   data.sort((a, b) => {
     const aName = a.menuPhoneticGuides ?? a.menuName;

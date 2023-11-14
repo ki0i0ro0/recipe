@@ -1,4 +1,3 @@
-"use server";
 import { Menu, Recipe } from "@/types";
 import * as admin from "firebase-admin";
 import crypto from "crypto";
@@ -22,37 +21,27 @@ if (admin.apps.length === 0) {
 
 const db = admin.firestore();
 
-/**
- * メールアドレスからユーザーIDを取得
- * @param email
- * @returns
- */
-export const getUserIdByEmail = async (email: string): Promise<string> => {
-  const userRef = db.collection("users").doc(email);
+export const getUserIdByEmail = async (args: {
+  email: string;
+}): Promise<string> => {
+  const userRef = db.collection("users").doc(args.email);
   const doc = await userRef.get();
   let userId = "";
   if (doc.exists) {
     userId = doc.data()!.id;
   } else {
-    const newUserRef = db.collection("users").doc(email);
     userId = crypto.randomUUID();
-    await newUserRef.set({ id: userId });
+    await userRef.set({ id: userId });
   }
   return userId;
 };
 
-/**
- * ユーザーレシピの取得
- * @param args
- * @returns
- */
 export const getUserRecipe = async (args: {
-  email: string;
+  userId: string;
 }): Promise<Recipe[]> => {
-  const userId = await getUserIdByEmail(args.email);
   const userRecipes = await db
     .collection("recipes")
-    .where("userId", "==", userId)
+    .where("userId", "==", args.userId)
     .get();
   const buff: Recipe[] = [];
   userRecipes.forEach((userRecipe) =>
@@ -61,42 +50,26 @@ export const getUserRecipe = async (args: {
   return buff;
 };
 
-/**
- * ユーザーレシピの追加
- * @param args
- * @returns
- */
 export const addUserRecipe = async (args: {
-  email: string;
+  userId: string;
   menuId: string;
 }) => {
-  const userId = await getUserIdByEmail(args.email);
   const docRef = db
     .collection("recipes")
     .doc() as admin.firestore.DocumentReference<DBRecipe>;
   const data = {
     id: docRef.id,
-    userId: userId,
+    userId: args.userId,
     menuId: args.menuId,
     createdAt: new Date().toString(),
   };
   await docRef.set(data);
 };
 
-/**
- * ユーザーレシピの削除
- * @param args
- * @returns
- */
-export const removeUserRecipe = async (args: { recipeId: string }) => {
+export const deleteUserRecipe = async (args: { recipeId: string }) => {
   await db.collection("recipes").doc(args.recipeId).delete();
 };
 
-/**
- * メニューの追加・更新
- * @param args
- * @returns
- */
 export const updateMenu = async (args: {
   id: string;
   phoneticGuides?: string;
@@ -119,11 +92,6 @@ export const updateMenu = async (args: {
   await docRef.set(data);
 };
 
-/**
- * メニューの削除
- * @param args
- * @returns
- */
 export const deleteMenu = async (args: { id: string }) => {
   const docRef = db
     .collection("menus")
@@ -131,11 +99,6 @@ export const deleteMenu = async (args: { id: string }) => {
   await docRef.delete();
 };
 
-/**
- * メニューの取得
- * @param args
- * @returns
- */
 export const getMenu = async (args: { id: string }): Promise<Menu> => {
   const docRef = (await db
     .collection("menus")
@@ -144,10 +107,6 @@ export const getMenu = async (args: { id: string }): Promise<Menu> => {
   return { id: docRef.id, ...data! };
 };
 
-/**
- * メニューの一覧取得
- * @returns
- */
 export const getMenus = async (): Promise<Menu[]> => {
   const menus = await db.collection("menus").get();
   const buff: Menu[] = [];

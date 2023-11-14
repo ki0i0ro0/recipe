@@ -2,12 +2,12 @@ import { AutoMode } from "@mui/icons-material";
 import { Avatar, Box, Button, Stack, Typography } from "@mui/material";
 import { BasePage } from "@/components/BasePage";
 import type { AppMenu, Menu } from "@/types";
-import { getCookedMenu, handleAddUserRecipe } from "@/app/actions";
+import { handleGetUserMenu, handleAddUserRecipe } from "@/app/actions";
 import Link from "next/link";
 
 export default async function Page() {
   let menu: Menu;
-  const cookedMenus = await getCookedMenu();
+  const cookedMenus = await handleGetUserMenu();
 
   const ShuffleMenu = (cookedMenus: AppMenu[]) => {
     const unCookedMenus = cookedMenus.filter((v) => !v.createdAt);

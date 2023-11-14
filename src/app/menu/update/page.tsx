@@ -2,13 +2,15 @@ import { Add } from "@mui/icons-material";
 import { Avatar, Typography } from "@mui/material";
 import { BaseForm } from "@/components/BaseForm";
 import { BasePage } from "@/components/BasePage";
-import { getMenu } from "@/server/firestore";
 import { redirect } from "next/navigation";
+import { handleGetMenu } from "@/app/actions";
 
 type Props = { searchParams: { [key: string]: string | string[] | undefined } };
 
 export default async function Page({ searchParams }: Props) {
-  const menu = await getMenu({ id: String(searchParams.id) });
+  const data = new FormData();
+  data.set("id", String(searchParams.id));
+  const menu = await handleGetMenu(data);
 
   if (!menu) {
     redirect("/");
