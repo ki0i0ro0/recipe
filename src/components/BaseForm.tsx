@@ -3,6 +3,7 @@ import { Button, Stack, TextField } from "@mui/material";
 import { Menu } from "@/types";
 import Link from "next/link";
 import { handleDeleteMenu, handleUpdateMenu } from "@/app/actions";
+import { ReturnButton } from "./ReturnButton";
 
 interface Props {
   initialValues?: Menu;
@@ -52,9 +53,7 @@ export const BaseForm = ({
         <Button type="submit" startIcon={icon} formAction={handleUpdateMenu}>
           はい
         </Button>
-        <Button>
-          <Link href="/">戻る</Link>
-        </Button>
+        <ReturnButton />
         {type === "update" && (
           <>
             <Button type="submit" formAction={handleDeleteMenu}>

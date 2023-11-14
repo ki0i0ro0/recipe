@@ -3,6 +3,7 @@ import { Avatar, Box, Button, Stack, Typography } from "@mui/material";
 import { BasePage } from "@/components/BasePage";
 import { handleAddUserRecipe, handleDeleteUserRecipe } from "@/app/actions";
 import Link from "next/link";
+import { ReturnButton } from "@/components/ReturnButton";
 type Props = { searchParams: { [key: string]: string | string[] | undefined } };
 
 export default function Page({ searchParams }: Props) {
@@ -39,9 +40,7 @@ export default function Page({ searchParams }: Props) {
                 メニューを編集
               </Link>
             </Button>
-            <Button>
-              <Link href="/">戻る</Link>
-            </Button>
+            <ReturnButton />
           </Stack>
         </form>
       </Box>

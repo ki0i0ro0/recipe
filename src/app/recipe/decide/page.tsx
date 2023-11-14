@@ -4,6 +4,7 @@ import { BasePage } from "@/components/BasePage";
 import type { AppMenu, Menu } from "@/types";
 import { handleGetUserMenu, handleAddUserRecipe } from "@/app/actions";
 import Link from "next/link";
+import { ReturnButton } from "@/components/ReturnButton";
 
 export default async function Page() {
   let menu: Menu;
@@ -45,9 +46,7 @@ export default async function Page() {
           <Stack>
             <Button type="submit">はい</Button>
             <Button href="/recipe/decide">やりなおす</Button>
-            <Button>
-              <Link href="/">戻る</Link>
-            </Button>
+            <ReturnButton />
           </Stack>
         </form>
       </Box>
