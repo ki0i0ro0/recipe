@@ -50,14 +50,17 @@ export const BaseForm = ({
         <Button type="submit" formAction={handleUpdateMenu} variant="contained">
           保存する
         </Button>
-        <ReturnButton />
         {type === "update" && (
-          <>
-            <Button type="submit" formAction={handleDeleteMenu}>
-              Delete
-            </Button>
-          </>
+          <Button
+            type="submit"
+            formAction={handleDeleteMenu}
+            variant="contained"
+            color="error"
+          >
+            削除する
+          </Button>
         )}
+        <ReturnButton />
       </Stack>
     </form>
   );
