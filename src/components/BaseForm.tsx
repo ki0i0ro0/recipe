@@ -2,6 +2,7 @@ import { Button, Stack, TextField } from "@mui/material";
 import { Menu } from "@/types";
 import { handleDeleteMenu, handleUpdateMenu } from "@/app/actions";
 import { ReturnButton } from "./ReturnButton";
+import { SubmitButton } from "./SubmitButton";
 
 interface Props {
   initialValues?: Menu;
@@ -47,18 +48,13 @@ export const BaseForm = ({
         type="text"
       />
       <Stack gap={1}>
-        <Button type="submit" formAction={handleUpdateMenu} variant="contained">
+        <SubmitButton color="primary" formAction={handleUpdateMenu}>
           保存する
-        </Button>
+        </SubmitButton>
         {type === "update" && (
-          <Button
-            type="submit"
-            formAction={handleDeleteMenu}
-            variant="contained"
-            color="error"
-          >
+          <SubmitButton color="error" formAction={handleDeleteMenu}>
             削除する
-          </Button>
+          </SubmitButton>
         )}
         <ReturnButton />
       </Stack>
