@@ -4,6 +4,7 @@ import { BasePage } from "@/components/BasePage";
 import { handleAddUserRecipe, handleDeleteUserRecipe } from "@/app/actions";
 import Link from "next/link";
 import { ReturnButton } from "@/components/ReturnButton";
+import { SubmitButton } from "@/components/SubmitButton";
 type Props = { searchParams: { [key: string]: string | string[] | undefined } };
 
 export default function Page({ searchParams }: Props) {
@@ -28,15 +29,17 @@ export default function Page({ searchParams }: Props) {
         <Typography color="text.secondary" gutterBottom>
           {isCreateMode ? "を作りましたか？" : "を取り消しますか？"}
         </Typography>
-        <form
-          action={isCreateMode ? handleAddUserRecipe : handleDeleteUserRecipe}
-        >
+        <form>
           <input type="hidden" name="menuId" value={userMenu.menuId} />
           <input type="hidden" name="recipeId" value={userMenu.recipeId} />
           <Stack gap={1}>
-            <Button type="submit" variant="contained">
+            <SubmitButton
+              formAction={
+                isCreateMode ? handleAddUserRecipe : handleDeleteUserRecipe
+              }
+            >
               はい
-            </Button>
+            </SubmitButton>
             <Button variant="contained" color="secondary">
               <Link href={`/menu/update?id=${userMenu.menuId}`}>
                 メニューを編集する

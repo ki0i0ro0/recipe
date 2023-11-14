@@ -3,6 +3,7 @@ import { Avatar, Box, Button, Stack, Typography } from "@mui/material";
 import { BasePage } from "@/components/BasePage";
 import { handleDeleteUserRecipes } from "@/app/actions";
 import { ReturnButton } from "@/components/ReturnButton";
+import { SubmitButton } from "@/components/SubmitButton";
 
 export default function Page() {
   return (
@@ -15,11 +16,11 @@ export default function Page() {
         <Typography color="text.secondary" gutterBottom paddingBottom={2}>
           レシピの作成履歴をリセットしますか？
         </Typography>
-        <form action={handleDeleteUserRecipes}>
+        <form>
           <Stack gap={1}>
-            <Button type="submit" variant="contained">
+            <SubmitButton formAction={handleDeleteUserRecipes}>
               はい
-            </Button>
+            </SubmitButton>
             <ReturnButton />
           </Stack>
         </form>

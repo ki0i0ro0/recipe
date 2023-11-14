@@ -5,10 +5,14 @@ import { useFormStatus } from "react-dom";
 interface Props {
   formAction: (data: FormData) => void;
   children: React.ReactNode;
-  color: "inherit" | "primary" | "secondary" | "error" | undefined;
+  color?: "inherit" | "primary" | "secondary" | "error" | undefined;
 }
 
-export const SubmitButton = ({ formAction, children, color }: Props) => {
+export const SubmitButton = ({
+  formAction,
+  children,
+  color = "primary",
+}: Props) => {
   const { pending } = useFormStatus();
   return (
     <Button

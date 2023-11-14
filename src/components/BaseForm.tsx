@@ -48,9 +48,7 @@ export const BaseForm = ({
         type="text"
       />
       <Stack gap={1}>
-        <SubmitButton color="primary" formAction={handleUpdateMenu}>
-          保存する
-        </SubmitButton>
+        <SubmitButton formAction={handleUpdateMenu}>保存する</SubmitButton>
         {type === "update" && (
           <SubmitButton color="error" formAction={handleDeleteMenu}>
             削除する

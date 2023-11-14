@@ -5,6 +5,7 @@ import type { AppMenu, Menu } from "@/types";
 import { handleGetUserMenu, handleAddUserRecipe } from "@/app/actions";
 import Link from "next/link";
 import { ReturnButton } from "@/components/ReturnButton";
+import { SubmitButton } from "@/components/SubmitButton";
 
 export default async function Page() {
   let menu: Menu;
@@ -41,12 +42,10 @@ export default async function Page() {
         <Typography color="text.secondary" gutterBottom>
           登録しますか？
         </Typography>
-        <form action={handleAddUserRecipe}>
+        <form>
           <input type="hidden" name="menuId" value={menu!.id} />
           <Stack gap={1}>
-            <Button type="submit" variant="contained">
-              はい
-            </Button>
+            <SubmitButton formAction={handleAddUserRecipe}>はい</SubmitButton>
             <Button href="/recipe/decide" variant="contained" color="secondary">
               やりなおす
             </Button>
