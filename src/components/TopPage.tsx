@@ -45,7 +45,7 @@ export const TopPage = async () => {
                   </TableCell>
                   <TableCell>
                     {row.createdAt
-                      ? new Date(row.createdAt).toLocaleDateString()
+                      ? new Date(row.createdAt).toLocaleDateString("ja-JP")
                       : null}
                   </TableCell>
                   <TableCell>
