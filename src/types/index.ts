@@ -20,7 +20,7 @@ export interface AppMenu {
   menuId: string;
   menuName: string;
   menuPhoneticGuides?: string;
-  createdAt: string;
+  createdAt?: string;
   recipeId: string;
   url?: string;
 }

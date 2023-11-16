@@ -18,7 +18,12 @@ export const TopPage = async () => {
     const bName = b.menuPhoneticGuides ?? b.menuName;
     return aName.localeCompare(bName, "ja");
   });
-  data.sort((a, b) => (a.createdAt < b.createdAt ? -1 : 1));
+  // 作成日順にソート
+  data.sort((a, b) => {
+    const aCreatedAt = a.createdAt ? +new Date(a.createdAt) : 0;
+    const bCreatedAt = b.createdAt ? +new Date(b.createdAt) : 0;
+    return aCreatedAt < bCreatedAt ? -1 : 1;
+  });
   const rows = data || [];
 
   return (
