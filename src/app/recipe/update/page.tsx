@@ -1,18 +1,31 @@
 import { Add, Delete } from "@mui/icons-material";
 import { Avatar, Box, Button, Stack, Typography } from "@mui/material";
 import { BasePage } from "@/components/BasePage";
-import { handleAddUserRecipe, handleDeleteUserRecipe } from "@/app/actions";
+import {
+  handleAddUserRecipe,
+  handleDeleteUserRecipe,
+  handleGetMenu,
+  handleGetRecipe,
+} from "@/app/actions";
 import Link from "next/link";
 import { ReturnButton } from "@/components/ReturnButton";
 import { SubmitButton } from "@/components/SubmitButton";
 type Props = { searchParams: { [key: string]: string | string[] | undefined } };
 
-export default function Page({ searchParams }: Props) {
+export default async function Page({ searchParams }: Props) {
+  const data = new FormData();
+  data.set("id", String(searchParams.menuId));
+  data.set("recipeId", String(searchParams.recipeId));
+  let recipe;
+  const menu = await handleGetMenu(data);
+  if (searchParams.recipeId) {
+    recipe = await handleGetRecipe(data);
+  }
   const userMenu = {
-    createdAt: searchParams.createdAt,
-    menuName: searchParams.menuName,
-    menuId: searchParams.menuId,
-    recipeId: searchParams.recipeId,
+    createdAt: recipe?.createdAt || "",
+    menuName: menu.name,
+    menuId: menu.id,
+    recipeId: recipe?.id || "",
   };
   const isCreateMode = userMenu.createdAt == "";
 

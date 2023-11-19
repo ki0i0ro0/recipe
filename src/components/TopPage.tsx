@@ -43,11 +43,7 @@ export const TopPage = async () => {
                 <TableRow key={row.menuId}>
                   <TableCell>
                     <Link
-                      href={`/recipe/update?menuId=${row.menuId}&recipeId=${
-                        row.recipeId
-                      }&createdAt=${row.createdAt ?? ""}&menuName=${
-                        row.menuName
-                      }`}
+                      href={`/recipe/update?menuId=${row.menuId}&recipeId=${row.recipeId}`}
                     >
                       {row.menuName}
                     </Link>
