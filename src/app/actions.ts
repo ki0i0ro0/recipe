@@ -4,11 +4,12 @@ import {
   deleteMenu,
   getMenus,
   getUserIdByEmail,
-  getUserRecipe,
+  getRecipesByUserId,
   deleteUserRecipe,
   updateMenu,
   getMenu,
   deleteUserRecipes,
+  getRecipe,
 } from "@/server/firestore";
 import { AppMenu } from "@/types";
 import { getServerSession } from "next-auth";
@@ -17,10 +18,10 @@ import { redirect } from "next/navigation";
 export const handleGetUserMenu = async () => {
   const email = await getEmail();
   const userId = await getUserIdByEmail({ email });
-  const recipe = await getUserRecipe({ userId });
+  const recipes = await getRecipesByUserId({ userId });
   const menus = await getMenus();
   const cookedMenus: AppMenu[] = menus.map((menu) => {
-    const cookedMenu = recipe.find((v) => v.menuId.toString() === menu.id);
+    const cookedMenu = recipes.find((v) => v.menuId.toString() === menu.id);
     return {
       menuId: menu.id,
       menuName: menu.name,
@@ -46,11 +47,23 @@ export const handleDeleteUserRecipe = async (data: FormData) => {
   redirect("/");
 };
 
-export const handleDeleteUserRecipes = async (data: FormData) => {
+export const handleDeleteUserRecipes = async (_data: FormData) => {
   const email = await getEmail();
   const userId = await getUserIdByEmail({ email });
   await deleteUserRecipes({ userId });
   redirect("/");
+};
+
+export const handleGetRecipe = async (data: FormData) => {
+  const recipe = await getRecipe({ id: String(data.get("recipeId")) });
+  if (recipe) {
+    const email = await getEmail();
+    const userId = await getUserIdByEmail({ email });
+    if (recipe.userId !== userId) {
+      return undefined;
+    }
+  }
+  return recipe;
 };
 
 export const handleGetMenu = async (data: FormData) => {

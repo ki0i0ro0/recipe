@@ -1,6 +1,7 @@
 export interface Recipe {
   id: string;
   menuId: string;
+  userId: string;
   createdAt: string;
 }
 
@@ -9,11 +10,6 @@ export interface Menu {
   name: string;
   phoneticGuides?: string;
   url: string;
-}
-
-export interface GetRecipe {
-  menus: Menu[];
-  recipe: Recipe[];
 }
 
 export interface AppMenu {
