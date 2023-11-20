@@ -5,11 +5,11 @@ import { BasePage } from "@/components/BasePage";
 import { redirect } from "next/navigation";
 import { handleGetMenu } from "@/app/actions";
 
-type Props = { searchParams: { [key: string]: string | string[] | undefined } };
+type Props = { params: { menuId: string } };
 
-export default async function Page({ searchParams }: Props) {
+export default async function Page({ params }: Props) {
   const data = new FormData();
-  data.set("id", String(searchParams.id));
+  data.set("id", String(params.menuId));
   const menu = await handleGetMenu(data);
 
   if (!menu) {

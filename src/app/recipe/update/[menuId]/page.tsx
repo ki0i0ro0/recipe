@@ -10,11 +10,15 @@ import {
 import Link from "next/link";
 import { ReturnButton } from "@/components/ReturnButton";
 import { SubmitButton } from "@/components/SubmitButton";
-type Props = { searchParams: { [key: string]: string | string[] | undefined } };
+import { SearchParams } from "@/types";
+type Props = {
+  searchParams: SearchParams;
+  params: { menuId: string };
+};
 
-export default async function Page({ searchParams }: Props) {
+export default async function Page({ searchParams, params }: Props) {
   const data = new FormData();
-  data.set("id", String(searchParams.menuId));
+  data.set("id", params.menuId);
   data.set("recipeId", String(searchParams.recipeId));
   let recipe;
   const menu = await handleGetMenu(data);
@@ -54,7 +58,7 @@ export default async function Page({ searchParams }: Props) {
               はい
             </SubmitButton>
             <Button variant="contained" color="secondary">
-              <Link href={`/menu/update?id=${userMenu.menuId}`}>
+              <Link href={`/menu/update/${userMenu.menuId}`}>
                 メニューを編集する
               </Link>
             </Button>
