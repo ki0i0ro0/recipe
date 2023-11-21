@@ -3,7 +3,6 @@ import { Avatar, Box, Button, Stack, Typography } from "@mui/material";
 import { BasePage } from "@/components/BasePage";
 import type { AppMenu, Menu } from "@/types";
 import { handleGetUserMenu, handleAddUserRecipe } from "@/app/actions";
-import Link from "next/link";
 import { ReturnButton } from "@/components/ReturnButton";
 import { SubmitButton } from "@/components/SubmitButton";
 

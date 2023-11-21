@@ -8,7 +8,7 @@ export const BaseDrawer = ({ children }: { children: React.ReactNode }) => {
       <AppBar position="sticky">
         <Toolbar>
           <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
-            Recipe App
+            レシピ帳
           </Typography>
           <IconButton color="inherit">
             <Link href="/recipe/decide">
