@@ -10,6 +10,7 @@ import {
   getMenu,
   deleteUserRecipes,
   getRecipe,
+  updateUserRecipe,
 } from "@/server/firestore";
 import { AppMenu } from "@/types";
 import { getServerSession } from "next-auth";
@@ -34,10 +35,15 @@ export const handleGetUserMenu = async () => {
 };
 
 export const handleAddUserRecipe = async (data: FormData) => {
-  const email = await getEmail();
-  const userId = await getUserIdByEmail({ email });
-  const menuId = String(data.get("menuId"));
-  await addUserRecipe({ userId, menuId });
+  const recipeId = String(data.get("recipeId"));
+  if (recipeId) {
+    await updateUserRecipe({ recipeId });
+  } else {
+    const email = await getEmail();
+    const userId = await getUserIdByEmail({ email });
+    const menuId = String(data.get("menuId"));
+    await addUserRecipe({ userId, menuId });
+  }
   redirect("/");
 };
 

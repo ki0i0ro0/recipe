@@ -74,6 +74,17 @@ export const addUserRecipe = async (args: {
   await docRef.set(data);
 };
 
+export const updateUserRecipe = async (args: { recipeId: string }) => {
+  const docRef = db
+    .collection("recipes")
+    .doc(args.recipeId) as admin.firestore.DocumentReference<DBRecipe>;
+  const data = (await docRef.get()).data();
+  if (data) {
+    data.createdAt = new Date().toString();
+    await docRef.set(data);
+  }
+};
+
 export const deleteUserRecipe = async (args: { recipeId: string }) => {
   await db.collection("recipes").doc(args.recipeId).delete();
 };
