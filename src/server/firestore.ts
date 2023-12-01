@@ -86,7 +86,19 @@ export const updateUserRecipe = async (args: { recipeId: string }) => {
 };
 
 export const deleteUserRecipe = async (args: { recipeId: string }) => {
-  await db.collection("recipes").doc(args.recipeId).delete();
+  const docRef = db
+    .collection("recipes")
+    .doc(args.recipeId) as admin.firestore.DocumentReference<DBRecipe>;
+  const data = (await docRef.get()).data();
+  if (data) {
+    if (data.histories) {
+      data.histories.push(data.createdAt);
+    } else {
+      data.histories = [data.createdAt];
+    }
+    data.createdAt = "";
+    await docRef.set(data);
+  }
 };
 
 export const deleteUserRecipes = async (args: { userId: string }) => {

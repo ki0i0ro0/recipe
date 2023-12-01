@@ -3,6 +3,7 @@ export interface Recipe {
   menuId: string;
   userId: string;
   createdAt: string;
+  histories?: string[];
 }
 
 export interface Menu {
