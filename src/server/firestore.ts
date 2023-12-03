@@ -82,6 +82,8 @@ export const updateUserRecipe = async (args: { recipeId: string }) => {
   if (data) {
     data.createdAt = new Date().toString();
     await docRef.set(data);
+  } else {
+    throw new Error("recipe not found");
   }
 };
 
@@ -98,6 +100,8 @@ export const deleteUserRecipe = async (args: { recipeId: string }) => {
     }
     data.createdAt = "";
     await docRef.set(data);
+  } else {
+    throw new Error("recipe not found");
   }
 };
 
