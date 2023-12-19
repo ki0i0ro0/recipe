@@ -29,6 +29,10 @@ export const handleGetUserMenu = async () => {
       menuPhoneticGuides: menu.phoneticGuides,
       createdAt: cookedMenu?.createdAt,
       recipeId: cookedMenu?.id || "",
+      cookedCount:
+        cookedMenu?.histories && cookedMenu?.histories.length > 0
+          ? cookedMenu?.histories.length
+          : undefined,
     };
   });
   return cookedMenus;

@@ -33,8 +33,9 @@ export const TopPage = async () => {
           <TableHead>
             <TableRow>
               <TableCell>料理名</TableCell>
+              <TableCell>作成回数</TableCell>
               <TableCell>作成日</TableCell>
-              <TableCell></TableCell>
+              <TableCell>レシピ</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -48,6 +49,7 @@ export const TopPage = async () => {
                       {row.menuName}
                     </Link>
                   </TableCell>
+                  <TableCell>{row.cookedCount}</TableCell>
                   <TableCell>
                     {row.createdAt
                       ? new Date(row.createdAt).toLocaleDateString("ja-JP")

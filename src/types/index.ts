@@ -20,6 +20,7 @@ export interface AppMenu {
   createdAt?: string;
   recipeId: string;
   url?: string;
+  cookedCount?: number;
 }
 
 export type SearchParams = { [key: string]: string | string[] | undefined };
