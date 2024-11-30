@@ -5,9 +5,10 @@ import { BasePage } from "@/components/BasePage";
 import { redirect } from "next/navigation";
 import { handleGetMenu } from "@/app/actions";
 
-type Props = { params: { menuId: string } };
+type Props = { params: Promise<{ menuId: string }> };
 
-export default async function Page({ params }: Props) {
+export default async function Page(props: Props) {
+  const params = await props.params;
   const data = new FormData();
   data.set("id", String(params.menuId));
   const menu = await handleGetMenu(data);

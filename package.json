@@ -11,24 +11,24 @@
     "format": "prettier --write src"
   },
   "dependencies": {
-    "@emotion/react": "11.11.4",
-    "@emotion/styled": "11.11.0",
-    "@mui/icons-material": "5.15.11",
-    "@mui/material": "5.15.11",
-    "firebase-admin": "12.6.0",
-    "next": "14.2.13",
-    "next-auth": "4.24.6",
-    "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "@emotion/react": "11.13.5",
+    "@emotion/styled": "11.13.5",
+    "@mui/icons-material": "6.1.9",
+    "@mui/material": "6.1.9",
+    "firebase-admin": "13.0.1",
+    "next": "15.0.0",
+    "next-auth": "^4.24.10",
+    "react": "19.0.0-rc-65a56d0e-20241020",
+    "react-dom": "19.0.0-rc-65a56d0e-20241020"
   },
   "devDependencies": {
-    "@types/node": "20.11.24",
-    "@types/react": "18.2.61",
-    "@types/react-dom": "18.2.19",
-    "eslint": "8.57.0",
-    "eslint-config-next": "14.1.1",
-    "prettier": "3.2.5",
-    "typescript": "5.3.3"
+    "@types/node": "22.10.1",
+    "@types/react": "npm:types-react@19.0.0-rc.1",
+    "@types/react-dom": "npm:types-react-dom@19.0.0-rc.1",
+    "eslint": "9.16.0",
+    "eslint-config-next": "15.0.3",
+    "prettier": "3.4.1",
+    "typescript": "5.5.4"
   },
   "eslintConfig": {
     "extends": "next/core-web-vitals"

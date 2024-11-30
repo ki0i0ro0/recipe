@@ -13,10 +13,12 @@ import { SubmitButton } from "@/components/SubmitButton";
 import { SearchParams } from "@/types";
 type Props = {
   searchParams: SearchParams;
-  params: { menuId: string };
+  params: Promise<{ menuId: string }>;
 };
 
-export default async function Page({ searchParams, params }: Props) {
+export default async function Page(props: Props) {
+  const params = await props.params;
+  const searchParams = await props.searchParams;
   const data = new FormData();
   data.set("id", params.menuId);
   data.set("recipeId", String(searchParams.recipeId));

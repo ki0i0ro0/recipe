@@ -1,11 +1,7 @@
 import { Box, Container } from "@mui/material";
 import { ReactNode } from "react";
 
-export const BasePage = ({
-  children,
-}: {
-  children: ReactNode;
-}): JSX.Element => {
+export const BasePage = ({ children }: { children: ReactNode }) => {
   return (
     <Container component="main">
       <Box

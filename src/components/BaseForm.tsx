@@ -9,10 +9,7 @@ interface Props {
   type: string;
 }
 
-export const BaseForm = ({
-  initialValues,
-  type = "create",
-}: Props): JSX.Element => {
+export const BaseForm = ({ initialValues, type = "create" }: Props) => {
   const defaultValues = initialValues ?? {
     name: "",
     url: "",
