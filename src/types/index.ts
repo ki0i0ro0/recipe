@@ -23,6 +23,4 @@ export interface AppMenu {
   cookedCount?: number;
 }
 
-export type SearchParams = { [key: string]: string | string[] | undefined };
-
 export type Order = "asc" | "desc";

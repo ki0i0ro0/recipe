@@ -10,21 +10,21 @@ import {
 import Link from "next/link";
 import { ReturnButton } from "@/components/ReturnButton";
 import { SubmitButton } from "@/components/SubmitButton";
-import { SearchParams } from "@/types";
+
 type Props = {
-  searchParams: SearchParams;
+  searchParams: Promise<{ recipeId: string }>;
   params: Promise<{ menuId: string }>;
 };
 
-export default async function Page(props: Props) {
-  const params = await props.params;
-  const searchParams = await props.searchParams;
+export default async function Page({ params, searchParams }: Props) {
+  const resolvedParams = await params;
+  const resolvedSearchParams = await searchParams;
   const data = new FormData();
-  data.set("id", params.menuId);
-  data.set("recipeId", String(searchParams.recipeId));
+  data.set("id", resolvedParams.menuId);
+  data.set("recipeId", String(resolvedSearchParams.recipeId));
   let recipe;
   const menu = await handleGetMenu(data);
-  if (searchParams.recipeId) {
+  if (resolvedSearchParams.recipeId) {
     recipe = await handleGetRecipe(data);
   }
   const userMenu = {
