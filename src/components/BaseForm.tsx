@@ -27,6 +27,7 @@ export const BaseForm = ({ initialValues, type = "create" }: Props) => {
         defaultValue={defaultValues.name}
         type="text"
         required
+        sx={{ backgroundColor: "background.paper", borderRadius: 1 }}
       />
       <TextField
         fullWidth
@@ -35,6 +36,7 @@ export const BaseForm = ({ initialValues, type = "create" }: Props) => {
         label="よみがな"
         defaultValue={defaultValues.phoneticGuides}
         type="text"
+        sx={{ backgroundColor: "background.paper", borderRadius: 1 }}
       />
       <TextField
         fullWidth
@@ -43,11 +45,14 @@ export const BaseForm = ({ initialValues, type = "create" }: Props) => {
         label="レシピURL"
         defaultValue={defaultValues.url}
         type="text"
+        sx={{ backgroundColor: "background.paper", borderRadius: 1 }}
       />
-      <Stack gap={1}>
-        <SubmitButton formAction={handleUpdateMenu}>保存する</SubmitButton>
+      <Stack gap={2} sx={{ mt: 2 }}>
+        <SubmitButton formAction={handleUpdateMenu} sx={{ backgroundColor: "primary.main", color: "primary.contrastText" }}>
+          保存する
+        </SubmitButton>
         {type === "update" && (
-          <SubmitButton color="error" formAction={handleDeleteMenu}>
+          <SubmitButton color="error" formAction={handleDeleteMenu} sx={{ backgroundColor: "error.main", color: "error.contrastText" }}>
             削除する
           </SubmitButton>
         )}

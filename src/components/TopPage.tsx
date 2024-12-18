@@ -5,6 +5,8 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Link as MuiLink,
+  Button,
 } from "@mui/material";
 import { BaseDrawer } from "@/components/BaseDrawer";
 import Link from "next/link";
@@ -29,13 +31,13 @@ export const TopPage = async () => {
   return (
     <BaseDrawer>
       <TableContainer>
-        <Table>
+        <Table sx={{ minWidth: 650 }}>
           <TableHead>
             <TableRow>
-              <TableCell>料理名</TableCell>
-              <TableCell>作成回数</TableCell>
-              <TableCell>作成日</TableCell>
-              <TableCell>レシピ</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>料理名</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>作成回数</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>作成日</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>レシピ</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -43,11 +45,13 @@ export const TopPage = async () => {
               return (
                 <TableRow key={row.menuId}>
                   <TableCell>
-                    <Link
+                    <MuiLink
+                      component={Link}
                       href={`/recipe/update/${row.menuId}?menuId=${row.menuId}&recipeId=${row.recipeId}`}
+                      sx={{ color: "primary.main", textDecoration: "none" }}
                     >
                       {row.menuName}
-                    </Link>
+                    </MuiLink>
                   </TableCell>
                   <TableCell>{row.cookedCount}</TableCell>
                   <TableCell>
@@ -57,9 +61,14 @@ export const TopPage = async () => {
                   </TableCell>
                   <TableCell>
                     {row.url && row.url.length > 5 ? (
-                      <a href={row.url} target="_blank" title="レシピリンク">
+                      <MuiLink
+                        href={row.url}
+                        target="_blank"
+                        rel="noopener"
+                        sx={{ color: "secondary.main", textDecoration: "none" }}
+                      >
                         レシピ
-                      </a>
+                      </MuiLink>
                     ) : null}
                   </TableCell>
                 </TableRow>
@@ -68,6 +77,15 @@ export const TopPage = async () => {
           </TableBody>
         </Table>
       </TableContainer>
+      <Button
+        variant="contained"
+        color="primary"
+        sx={{ mt: 2 }}
+        component={Link}
+        href="/menu/create"
+      >
+        メニューを追加
+      </Button>
     </BaseDrawer>
   );
 };
