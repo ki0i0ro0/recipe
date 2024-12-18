@@ -28,10 +28,10 @@ export default async function Page() {
 
   return (
     <BasePage>
-      <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-        <AutoMode />
+      <Avatar sx={{ m: 1, bgcolor: "secondary.main", width: 56, height: 56 }}>
+        <AutoMode fontSize="large" />
       </Avatar>
-      <Box>
+      <Box sx={{ textAlign: "center", mt: 2, mb: 2 }}>
         <Typography color="text.secondary" gutterBottom>
           本日のおすすめメニュー
         </Typography>
@@ -43,7 +43,7 @@ export default async function Page() {
         </Typography>
         <form>
           <input type="hidden" name="menuId" value={menu!.id} />
-          <Stack gap={1}>
+          <Stack gap={2} sx={{ mt: 2 }}>
             <SubmitButton formAction={handleAddUserRecipe}>はい</SubmitButton>
             <Button href="/recipe/decide" variant="contained" color="secondary">
               やりなおす

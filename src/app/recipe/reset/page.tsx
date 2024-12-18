@@ -8,16 +8,18 @@ import { SubmitButton } from "@/components/SubmitButton";
 export default function Page() {
   return (
     <BasePage>
-      <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-        <PlaylistRemove />
+      <Avatar sx={{ m: 1, bgcolor: "secondary.main", width: 56, height: 56 }}>
+        <PlaylistRemove fontSize="large" />
       </Avatar>
-      <Typography color="text.secondary">レシピリセット</Typography>
-      <Box sx={{ paddingTop: "1em" }}>
-        <Typography color="text.secondary" gutterBottom paddingBottom={2}>
+      <Box sx={{ textAlign: "center", mt: 2, mb: 2 }}>
+        <Typography color="text.secondary" gutterBottom>
+          レシピリセット
+        </Typography>
+        <Typography color="text.secondary" gutterBottom>
           レシピの作成履歴をリセットしますか？
         </Typography>
         <form>
-          <Stack gap={1}>
+          <Stack gap={2} sx={{ mt: 2 }}>
             <SubmitButton formAction={handleDeleteUserRecipes}>
               はい
             </SubmitButton>
