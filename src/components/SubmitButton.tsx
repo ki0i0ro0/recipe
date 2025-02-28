@@ -1,6 +1,4 @@
-"use client";
 import { Button } from "@mui/material";
-import { useFormStatus } from "react-dom";
 
 interface Props {
   formAction: (data: FormData) => void;
@@ -13,10 +11,8 @@ export const SubmitButton = ({
   children,
   color = "primary",
 }: Props) => {
-  const { pending } = useFormStatus();
   return (
     <Button
-      disabled={pending}
       type="submit"
       formAction={formAction}
       color={color}
