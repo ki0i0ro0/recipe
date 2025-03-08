@@ -50,8 +50,8 @@ devDependencies:
     specifier: 15.0.4
     version: 15.0.4(eslint@9.16.0)(typescript@5.7.2)
   prettier:
-    specifier: 3.4.2
-    version: 3.4.2
+    specifier: 3.5.3
+    version: 3.5.3
   typescript:
     specifier: 5.7.2
     version: 5.7.2
@@ -1229,6 +1229,12 @@ packages:
     dependencies:
       '@types/react': /types-react@19.0.0-rc.1
     dev: false
+
+  /@types/react@19.0.10:
+    resolution: {integrity: sha512-JuRQ9KXLEjaUNjTWpzuR231Z2WpIwczOkBEIvbHNCzQefFIT0L8IqE6NV6ULLyC1SI/i234JnDoMkfg+RjQj2g==}
+    dependencies:
+      csstype: 3.1.3
+    dev: true
 
   /@types/request@2.48.12:
     resolution: {integrity: sha512-G3sY+NpsA9jnwm0ixhAFQSJ3Q9JkpLZpJbI3GMv0mIAT0y3mRabYeINzal5WOChIiaTEGQYlHOKgkaM9EisWHw==}
@@ -3657,8 +3663,8 @@ packages:
     engines: {node: '>= 0.8.0'}
     dev: true
 
-  /prettier@3.4.2:
-    resolution: {integrity: sha512-e9MewbtFo+Fevyuxn/4rrcDAaq0IYxPGLvObpQjiZBMAzB9IGmzlnG9RZy3FFas+eBMu2vA0CszMeduow5dIuQ==}
+  /prettier@3.5.3:
+    resolution: {integrity: sha512-QQtaxnoDJeAkDvDKWCLiwIXkTgRhwYDEQCghU9Z6q03iyek/rxRh/2lC3HB7P8sWT2xC/y5JDctPLBIGzHKbhw==}
     engines: {node: '>=14'}
     hasBin: true
     dev: true
@@ -4325,7 +4331,7 @@ packages:
   /types-react-dom@19.0.0:
     resolution: {integrity: sha512-qtWBYduBCmrgf4wqnTrGttEJJSZ6cTGmzuvmWd/34TJNKz/Pp69Islc1+txHF3nRxSuRvmhxztFXvLyxhp8G2w==}
     dependencies:
-      '@types/react': /types-react@19.0.0-rc.1
+      '@types/react': 19.0.10
     dev: true
 
   /types-react@19.0.0-rc.1:
