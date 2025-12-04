@@ -1,6 +1,6 @@
-import { TopPage } from "@/components/TopPage";
-import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
+import { getServerSession } from "next-auth";
+import { TopPage } from "@/components/TopPage";
 
 export default async function Page() {
   const session = await getServerSession();

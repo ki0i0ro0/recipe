@@ -1,9 +1,9 @@
 import { Add } from "@mui/icons-material";
 import { Avatar, Typography } from "@mui/material";
-import { BaseForm } from "@/components/BaseForm";
-import { BasePage } from "@/components/BasePage";
 import { redirect } from "next/navigation";
 import { handleGetMenu } from "@/app/actions";
+import { BaseForm } from "@/components/BaseForm";
+import { BasePage } from "@/components/BasePage";
 
 type Props = { params: Promise<{ menuId: string }> };
 

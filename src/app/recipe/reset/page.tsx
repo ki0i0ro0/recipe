@@ -1,7 +1,7 @@
 import { PlaylistRemove } from "@mui/icons-material";
-import { Avatar, Box, Button, Stack, Typography } from "@mui/material";
-import { BasePage } from "@/components/BasePage";
+import { Avatar, Box, Stack, Typography } from "@mui/material";
 import { handleDeleteUserRecipes } from "@/app/actions";
+import { BasePage } from "@/components/BasePage";
 import { ReturnButton } from "@/components/ReturnButton";
 import { SubmitButton } from "@/components/SubmitButton";
 

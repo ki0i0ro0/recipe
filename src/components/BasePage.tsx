@@ -1,5 +1,5 @@
 import { Box, Container } from "@mui/material";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 
 export const BasePage = ({ children }: { children: ReactNode }) => {
   return (

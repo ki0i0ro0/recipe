@@ -1,6 +1,6 @@
 import { Stack, TextField } from "@mui/material";
-import { Menu } from "@/types";
 import { handleDeleteMenu, handleUpdateMenu } from "@/app/actions";
+import type { Menu } from "@/types";
 import { ReturnButton } from "./ReturnButton";
 import { SubmitButton } from "./SubmitButton";
 

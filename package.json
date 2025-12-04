@@ -6,9 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint --dir src",
-    "lint:fix": "next lint --dir src --fix",
-    "format": "prettier --write src"
+    "lint": "biome check src",
+    "lint:fix": "biome check --write src",
+    "format": "biome format --write src"
   },
   "dependencies": {
     "@emotion/react": "11.13.5",
@@ -22,16 +22,10 @@
     "react-dom": "19.0.1"
   },
   "devDependencies": {
+    "@biomejs/biome": "^2.3.8",
     "@types/node": "22.10.1",
     "@types/react": "19.0.1",
     "@types/react-dom": "19.0.1",
-    "eslint": "8.57.1",
-    "eslint-config-next": "15.0.5",
-    "prettier": "3.4.2",
     "typescript": "5.7.2"
-  },
-  "eslintConfig": {
-    "extends": "next/core-web-vitals"
-  },
-  "prettier": {}
+  }
 }

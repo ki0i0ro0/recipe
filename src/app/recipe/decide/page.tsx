@@ -1,13 +1,13 @@
 import { AutoMode } from "@mui/icons-material";
 import { Avatar, Box, Button, Stack, Typography } from "@mui/material";
+import { handleAddUserRecipe, handleGetUserMenu } from "@/app/actions";
 import { BasePage } from "@/components/BasePage";
-import type { AppMenu, Menu } from "@/types";
-import { handleGetUserMenu, handleAddUserRecipe } from "@/app/actions";
 import { ReturnButton } from "@/components/ReturnButton";
 import { SubmitButton } from "@/components/SubmitButton";
+import type { AppMenu, Menu } from "@/types";
 
 export default async function Page() {
-  let menu: Menu;
+  let menu: Menu | undefined;
   const cookedMenus = await handleGetUserMenu();
 
   const ShuffleMenu = (cookedMenus: AppMenu[]) => {
@@ -36,13 +36,13 @@ export default async function Page() {
           本日のおすすめメニュー
         </Typography>
         <Typography variant="h5" component="div" gutterBottom>
-          {menu!.name}
+          {menu?.name}
         </Typography>
         <Typography color="text.secondary" gutterBottom>
           登録しますか？
         </Typography>
         <form>
-          <input type="hidden" name="menuId" value={menu!.id} />
+          <input type="hidden" name="menuId" value={menu?.id} />
           <Stack gap={1}>
             <SubmitButton formAction={handleAddUserRecipe}>はい</SubmitButton>
             <Button href="/recipe/decide" variant="contained" color="secondary">

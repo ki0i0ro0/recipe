@@ -1,6 +1,6 @@
-import { Menu, Recipe } from "@/types";
+import crypto from "node:crypto";
 import * as admin from "firebase-admin";
-import crypto from "crypto";
+import type { Menu, Recipe } from "@/types";
 
 interface DBRecipe extends Omit<Recipe, "id"> {}
 
@@ -26,7 +26,7 @@ export const getUserIdByEmail = async (args: {
   const doc = await userRef.get();
   let userId = "";
   if (doc.exists) {
-    userId = doc.data()!.id;
+    userId = doc.data()?.id;
   } else {
     userId = crypto.randomUUID();
     await userRef.set({ id: userId });
@@ -42,9 +42,9 @@ export const getRecipesByUserId = async (args: {
     .where("userId", "==", args.userId)
     .get();
   const buff: Recipe[] = [];
-  userRecipes.forEach((userRecipe) =>
-    buff.push({ ...userRecipe.data(), id: userRecipe.id } as Recipe),
-  );
+  userRecipes.forEach((userRecipe) => {
+    buff.push({ ...userRecipe.data(), id: userRecipe.id } as Recipe);
+  });
   return buff;
 };
 
@@ -152,6 +152,8 @@ export const getMenu = async (args: { id: string }): Promise<Menu> => {
 export const getMenus = async (): Promise<Menu[]> => {
   const menus = await db.collection("menus").get();
   const buff: Menu[] = [];
-  menus.forEach((menu) => buff.push({ ...menu.data(), id: menu.id } as Menu));
+  menus.forEach((menu) => {
+    buff.push({ ...menu.data(), id: menu.id } as Menu);
+  });
   return buff;
 };

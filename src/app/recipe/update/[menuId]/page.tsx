@@ -1,15 +1,16 @@
 import { Add, Delete } from "@mui/icons-material";
 import { Avatar, Box, Button, Stack, Typography } from "@mui/material";
-import { BasePage } from "@/components/BasePage";
+import Link from "next/link";
 import {
   handleAddUserRecipe,
   handleDeleteUserRecipe,
   handleGetMenu,
   handleGetRecipe,
 } from "@/app/actions";
-import Link from "next/link";
+import { BasePage } from "@/components/BasePage";
 import { ReturnButton } from "@/components/ReturnButton";
 import { SubmitButton } from "@/components/SubmitButton";
+import type { Recipe } from "@/types";
 
 type Props = {
   searchParams: Promise<{ recipeId: string }>;
@@ -22,7 +23,7 @@ export default async function Page({ params, searchParams }: Props) {
   const data = new FormData();
   data.set("id", resolvedParams.menuId);
   data.set("recipeId", String(resolvedSearchParams.recipeId));
-  let recipe;
+  let recipe: Recipe | undefined;
   const menu = await handleGetMenu(data);
   if (resolvedSearchParams.recipeId) {
     recipe = await handleGetRecipe(data);
@@ -33,7 +34,7 @@ export default async function Page({ params, searchParams }: Props) {
     menuId: menu.id,
     recipeId: recipe?.id || "",
   };
-  const isCreateMode = userMenu.createdAt == "";
+  const isCreateMode = userMenu.createdAt === "";
 
   return (
     <BasePage>

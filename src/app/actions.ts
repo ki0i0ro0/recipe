@@ -1,20 +1,20 @@
 "use server";
+import { redirect } from "next/navigation";
+import { getServerSession } from "next-auth";
 import {
   addUserRecipe,
   deleteMenu,
-  getMenus,
-  getUserIdByEmail,
-  getRecipesByUserId,
   deleteUserRecipe,
-  updateMenu,
-  getMenu,
   deleteUserRecipes,
+  getMenu,
+  getMenus,
   getRecipe,
+  getRecipesByUserId,
+  getUserIdByEmail,
+  updateMenu,
   updateUserRecipe,
 } from "@/server/firestore";
-import { AppMenu } from "@/types";
-import { getServerSession } from "next-auth";
-import { redirect } from "next/navigation";
+import type { AppMenu } from "@/types";
 
 export const handleGetUserMenu = async () => {
   const email = await getEmail();

@@ -1,7 +1,7 @@
-import { AppBar, Toolbar, Typography, IconButton } from "@mui/material";
+import { AddBox, PlaylistRemove, Shuffle } from "@mui/icons-material";
+import { AppBar, IconButton, Toolbar, Typography } from "@mui/material";
 import Link from "next/link";
 import { Logout } from "./Logout";
-import { Shuffle, AddBox, PlaylistRemove } from "@mui/icons-material";
 export const BaseDrawer = ({ children }: { children: React.ReactNode }) => {
   return (
     <>

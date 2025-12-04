@@ -5,7 +5,12 @@ export default function Page() {
   return (
     <>
       Not signed in <br />
-      <button onClick={() => signIn("google", { callbackUrl: "/" })}>
+      <button
+        type="button"
+        onClick={() => {
+          signIn("google", { callbackUrl: "/" });
+        }}
+      >
         Sign in
       </button>
     </>
